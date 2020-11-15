@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 
 const style = {
   margin: "2.5vh 0",
+  fontSize: "1.5rem",
+  width: "10vw",
+  height: "3%",
 };
 
 const ProceedButton = () => {

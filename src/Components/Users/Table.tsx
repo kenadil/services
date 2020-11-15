@@ -1,30 +1,53 @@
-import { Divider, Table } from "antd";
+import { Button, Divider, Table } from "antd";
 import React from "react";
 
+let style = {
+  paddingBottom: "3.5vh",
+};
+
 const columns: any = [
-  {
-    title: <b>ID</b>,
-    dataIndex: "id",
-    fixed: "left",
-    render: (text: String) => <b>{text}</b>,
-    width: "20%",
-  },
   {
     title: <b>Full name</b>,
     dataIndex: "name",
     fixed: "left",
+    width: "25%",
+    render: (text: String) => <a href="#">{text}</a>
+  },
+  {
+    title: <b>ID</b>,
+    dataIndex: "id",
+    fixed: "left",
+    width: "20%",
   },
   {
     title: <b>Date created</b>,
     dataIndex: "date",
   },
+  {
+    title: <b>Enrollments</b>,
+    dataIndex: 'enrollments',
+  },
+  {
+    title: <b>GPA</b>,
+    dataIndex: 'gpa',
+  },
+  {
+    title: 
+      <Button style={{ float: "right", marginRight: "1.25vw" }}>
+        Delete
+      </Button>,
+    dataIndex: '',
+    fixed: "right",
+  }
 ];
 
-interface record {
+export interface record {
   id: any,
   key: any,
   name: String,
   date: any,
+  enrollments: any,
+  gpa: any,
 }
 
 let data: record[] = [];
@@ -32,8 +55,20 @@ for (var i = 0; i < 46; i++) {
   data.push({
     key: i,
     id: (i < 10) ? "18011000"+i : "1801100" + i,
-    name: "John Brawo " + i,
-    date: "15.11.2020",
+    name: "Naruto Uzumaki " + i,
+    date: "Nov 15, 2020",
+    enrollments: Math.round(Math.random() * (8 - 1) + 1),
+    gpa: (Math.random() * (4 - 2) + 2).toFixed(2),
+  });
+}
+for (i = 100; i < 500; i++) {
+  data.push({
+    key: i,
+    id: "180110" + i,
+    name: "Naruto Uzumaki " + i,
+    date: "Nov 15, 2020",
+    enrollments: Math.round(Math.random() * (8 - 1) + 1),
+    gpa: (Math.random() * (4 - 2) + 2).toFixed(2),
   });
 }
 
@@ -62,7 +97,7 @@ class UserTable extends React.Component {
     }
     return (
       <div className="UserTable">
-        <h2>Users</h2>
+        <h1>Users</h1>
         <Divider style={{ margin: "2.5vh 0" }} />
         <Table
           rowSelection={rowSelection}
@@ -70,6 +105,7 @@ class UserTable extends React.Component {
           pagination={
             {
               position: ["topRight", "topRight"],
+              pageSize: 25,
             }
           }
           columns={columns}
@@ -79,6 +115,7 @@ class UserTable extends React.Component {
               this.selectRow(record);
             },
           })}
+          style={style}
         />
       </div>
     );

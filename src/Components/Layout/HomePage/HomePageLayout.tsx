@@ -23,12 +23,12 @@ const HomePageLayout = (props: any) => {
         <source
           srcSet={webpURL}
           type="image/webp"
-          style={{ width: "23.5vw", maxWidth: "240.5px" }}
+          style={{ width: "23.5vw", maxWidth: "480.5px" }}
         />
         <img
           src={homePng.pngUrl}
           alt={homePng.alt}
-          style={{ width: "23.5vw", maxWidth: "240.5px" }}
+          style={{ width: "23.5vw", maxWidth: "480.5px" }}
         />
       </picture>
     </Layout>

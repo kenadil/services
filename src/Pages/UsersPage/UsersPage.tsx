@@ -5,9 +5,16 @@ import "./UsersPage.css";
 
 const UsersPage = () => {
   return (
-    <>
+    <div style={{display: "flex", flexDirection: "row",}}>
+      <div style={
+        {
+          minWidth: "20%",
+        }
+      }>
+        I AM THE STORM THAT IS APPROACHING
+      </div>
       <UserTable />
-    </>
+    </div>
   );
 };
 
