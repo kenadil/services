@@ -1,6 +1,6 @@
 body {
   background: #eeeeee;
-  font-size: 16px;
+  font-size: 24px;
 }
 
 .purple-button {
@@ -12,4 +12,16 @@ body {
   background: white!important;
   color: #3b2c85!important;
   border: 1px solid #3b2c85!important;
+}
+
+.site-layout-content {
+  min-height: 280px;
+  display: flex;
+  flex-direction: row;
+  padding: 10% 0 0 25%;
+}
+.site-layout-content h3 {
+  margin-bottom: 3.22vh;
+  font-style: bold;
+  font-weight: 700;
 }

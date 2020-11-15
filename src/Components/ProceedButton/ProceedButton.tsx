@@ -1,23 +1,19 @@
 import { Button } from "antd";
 import React from "react";
-import "./ProceedButton.css";
+import { Link } from "react-router-dom";
 
 const style = {
-    margin: '2.5vh 0',
-    background: '#3b2c85',
-    border: "none",
-}
+  margin: "2.5vh 0",
+};
 
 const ProceedButton = () => {
-    return (
-        <Button 
-            style={style}
-            type="primary"
-            className="purple-button"
-        >
-            Click me
-        </Button>
-    )
-}
+  return (
+    <Link to="/users">
+      <Button style={style} type="primary" className="purple-button">
+        Click me
+      </Button>
+    </Link>
+  );
+};
 
 export default ProceedButton;
