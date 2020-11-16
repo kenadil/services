@@ -7,6 +7,7 @@ body {
   background: #3b2c85!important;
   border: 1px solid #3b2c85!important;
   border-radius: 50px;
+  color: white!important;
 }
 .purple-button:hover {
   background: white!important;
