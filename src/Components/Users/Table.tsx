@@ -1,17 +1,19 @@
 import { Button, Divider, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import Loader from "react-loader-spinner";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getRecordTable } from "../../Utils/dispatchedData";
 import { useDispatch, useSelector } from "react-redux";
-import DeleteModal from "../DeleteModal/DeleteModal";
+import DeleteModal from "../Modals/DeleteModal";
+import AddModal from "../Modals/AddModal";
+import { addRecord } from "../../Store/Actions";
 
 let style = {
   paddingBottom: "3.5vh",
 };
 
 export type RecordType = {
-  id: number,
+  id: any,
   key: number,
   name: string,
   date: string,
@@ -49,16 +51,28 @@ const UserTable = () => {
     console.log("selectedRowKeys changed: ", selectedRowKeys);
   };
 
-  const { selectedRowKeys } = selectedKeys;
   const rowSelection = {
-    selectedRowKeys,
+    selectedKeys,
     onChange: onSelectedRowKeyChange,
   };
 
+  const deleteSelected = () => {
+    const {selectedRowKeys} = selectedKeys;
+    console.log(selectedRowKeys);
+    Promise.all(
+    recordTable.filter((record) => selectedRowKeys.includes(record.id))
+    .map((record) => {
+        selectedRowKeys.splice(selectedRowKeys.indexOf(record.id));
+        console.log("deleted");
+        record.onDelete();
+      }
+    )).then(() =>
+    setSelectedKeys(selectedRowKeys)).then(() =>
+    setSelected(selectedRowKeys.length));
+  }
+
   return (
-    <div className="UserTable">
-      <h1>Users</h1>
-      <Divider style={{ margin: "2.5vh 0" }} />
+    <>
       {loading ? (
         <Loader
           type="Bars"
@@ -94,7 +108,7 @@ const UserTable = () => {
               width="25%"
               render={(text: any) => <a href="/#">{text}</a>}
             />
-            <Column title={<b>ID</b>} dataIndex="id" key="id" fixed="left" width="20%" />
+            <Column title={<b>ID</b>} dataIndex="key" key="id" fixed="left" width="20%" />
             <Column title={<b>Date created</b>} dataIndex="date" />
             <Column title={<b>Enrollments</b>} dataIndex="enrollments" />
             <Column title={<b>GPA</b>} dataIndex="gpa" />
@@ -103,6 +117,7 @@ const UserTable = () => {
                 <Button
                   disabled={selected === 0}
                   style={{ float: "right", marginRight: "1.25vw" }}
+                  onClick={deleteSelected}
                 >
                   Delete ({selected})
                 </Button>
@@ -123,7 +138,7 @@ const UserTable = () => {
           </Table>
         </>
       )}
-    </div>
+    </>
   );
 };
 

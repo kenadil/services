@@ -1,3 +1,5 @@
+import { RecordType } from "../Components/Users/Table";
+
 const API_URL = "http://localhost:3001";
 
 export async function fetchRecordsAPI() {
@@ -16,6 +18,21 @@ export async function deleteRecordAPI(id: number) {
         } else {
             const error = await response.json();
             console.log(error);
+        }
+    })
+}
+
+export async function addRecordAPI(record: RecordType) {
+    return fetch(`${API_URL}/users`, {
+        method: 'POST',
+        body: JSON.stringify(record),
+        headers: { "Content-Type": "application/json; charset=UTF-8" },
+    }).then(async (response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            const error = await response.json();
+            throw new Error(error);
         }
     })
 }

@@ -4,18 +4,22 @@ import "./UsersPage.css";
 import {useDispatch} from "react-redux";
 import {store} from "../../Store/store";
 import {isEqual} from "lodash";
-import { fetchRecords } from "../../Store/Actions";
+import { addRecord, fetchRecords } from "../../Store/Actions";
+import AddModal from "../../Components/Modals/AddModal";
+import { Divider } from "antd";
 
 const UsersPage = () => {
+  const [lastId, setLastId] = useState(0);
   const dispatch = useDispatch();
+  let state = store.getState();
   useEffect(() => {
     dispatch(fetchRecords());
-    let state = store.getState();
+    setLastId(state.recordState[state.recordState.length - 1]);
     store.subscribe(() => {
       let newState = store.getState();
-      console.log(isEqual(state.recordState, newState.recordState));
       if (!isEqual(state.recordState, newState.recordState)) {
         dispatch(fetchRecords());
+        setLastId(newState.recordState[newState.recordState.length - 1].id);
       }
       state = newState;
     });
@@ -28,7 +32,20 @@ const UsersPage = () => {
         }}
       >
       </div>
-      <UserTable />
+      <div className="UserTable">
+        <div style={{ display: "flex", flexDirection: "row", height: "5vh" }}>
+          <h1 style={{ marginRight: "82%" }}>Users</h1>
+            <AddModal 
+              title={<h3>Add user</h3>}
+              onSave={(record) => dispatch(addRecord(record))}
+              icon={undefined}
+              record={undefined}
+              lastId={lastId}
+            />
+          </div>
+        <Divider style={{ margin: "2.5vh 0" }} />
+        <UserTable />
+      </div>
     </div>
   );
 };

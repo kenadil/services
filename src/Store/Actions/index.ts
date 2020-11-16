@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import { ADD_RECORD, DELETE_RECORD, FETCH_RECORDS } from "./ActionType";
-import { fetchRecordsAPI } from "../../Services/api.service";
+import { addRecordAPI, fetchRecordsAPI } from "../../Services/api.service";
 import { RecordType } from "../../Components/Users/Table";
 
 export const deleteRecord = (id: number) => ({
@@ -15,5 +15,7 @@ export const fetchRecords = () => (dispatch: Dispatch) => {
 };
 
 export const addRecord = (record: RecordType) => (dispatch: Dispatch) => {
-    dispatch({ type: ADD_RECORD, record });
+  addRecordAPI(record)
+  .then((record) => dispatch({ type: ADD_RECORD, record }))
+  .catch((error) => console.log(error));
 }
