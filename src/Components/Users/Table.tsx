@@ -1,12 +1,11 @@
-import { Button, Divider, Table } from "antd";
+import { Button, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import Loader from "react-loader-spinner";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { getRecordTable } from "../../Utils/dispatchedData";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteModal from "../Modals/DeleteModal";
-import AddModal from "../Modals/AddModal";
-import { addRecord } from "../../Store/Actions";
+import { sortDate, sortEnrollments, sortGPA, sortKey } from "../../Services/sorters";
 
 let style = {
   paddingBottom: "3.5vh",
@@ -27,7 +26,11 @@ export type stateType = {
   // filterState: string, 
 };
 
-const UserTable = () => {
+export type UserTablePropsType = {
+  setUpdate: (value: boolean) => void;
+};
+
+const UserTable = ({ setUpdate }: UserTablePropsType) => {
   const { recordState } = useSelector((state: stateType) => ({
     recordState: state.recordState,
   }));
@@ -48,7 +51,6 @@ const UserTable = () => {
   const onSelectedRowKeyChange = (selectedRowKeys: any[]) => {
     setSelectedKeys({ selectedRowKeys });
     setSelected(selectedRowKeys.length);
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
   };
 
   const rowSelection = {
@@ -57,8 +59,10 @@ const UserTable = () => {
   };
 
   const deleteSelected = () => {
+    setUpdate(false);
     const {selectedRowKeys} = selectedKeys;
     console.log(selectedRowKeys);
+    setLoading(true);
     Promise.all(
     recordTable.filter((record) => selectedRowKeys.includes(record.id))
     .map((record) => {
@@ -68,7 +72,12 @@ const UserTable = () => {
       }
     )).then(() =>
     setSelectedKeys(selectedRowKeys)).then(() =>
-    setSelected(selectedRowKeys.length));
+    setSelected(selectedRowKeys.length)).then(() => setLoading(false)).then(() => setUpdate(true));
+  }
+
+  const enrollmentsFilters = [];
+  for (var i = 1; i < 9; i++) {
+    enrollmentsFilters.push({ text: i, value: i});
   }
 
   return (
@@ -108,10 +117,34 @@ const UserTable = () => {
               width="25%"
               render={(text: any) => <a href="/#">{text}</a>}
             />
-            <Column title={<b>ID</b>} dataIndex="key" key="id" fixed="left" width="20%" />
-            <Column title={<b>Date created</b>} dataIndex="date" />
-            <Column title={<b>Enrollments</b>} dataIndex="enrollments" />
-            <Column title={<b>GPA</b>} dataIndex="gpa" />
+            <Column 
+             title={<b>ID</b>}
+             dataIndex="key"
+             key="key"
+             fixed="left"
+             width="20%"
+             defaultSortOrder="descend"
+             sorter={
+               //(a:any, b:any) => a.key - b.key
+               sortKey
+              }
+            />
+            <Column 
+             title={<b>Date created</b>}
+             dataIndex="date"
+             width="20%"
+             sorter={sortDate}
+            />
+            <Column 
+             title={<b>Enrollments</b>}
+             dataIndex="enrollments"
+             sorter={sortEnrollments}
+             filters={enrollmentsFilters}
+             onFilter={(value, record) => record.enrollments === value}
+            />
+            <Column title={<b>GPA</b>} dataIndex="gpa" 
+              sorter={sortGPA}
+            />
             <Column
               title={
                 <Button

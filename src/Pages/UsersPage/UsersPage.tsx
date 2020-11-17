@@ -9,6 +9,7 @@ import AddModal from "../../Components/Modals/AddModal";
 import { Divider } from "antd";
 
 const UsersPage = () => {
+  const [update, setUpdate] = useState(true);
   const [lastId, setLastId] = useState(0);
   const dispatch = useDispatch();
   let state = store.getState();
@@ -17,11 +18,11 @@ const UsersPage = () => {
     setLastId(state.recordState[state.recordState.length - 1]);
     store.subscribe(() => {
       let newState = store.getState();
-      if (!isEqual(state.recordState, newState.recordState)) {
+      if (!isEqual(state.recordState, newState.recordState) && update) {
         dispatch(fetchRecords());
         setLastId(newState.recordState[newState.recordState.length - 1].id);
+        state = newState;
       }
-      state = newState;
     });
   }, [dispatch]);
   return (
@@ -44,7 +45,7 @@ const UsersPage = () => {
             />
           </div>
         <Divider style={{ margin: "2.5vh 0" }} />
-        <UserTable />
+        <UserTable setUpdate={setUpdate} />
       </div>
     </div>
   );
