@@ -1,29 +1,40 @@
 import { Button, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import Loader from "react-loader-spinner";
-import React, { useState } from "react";
-import { getRecordTable } from "../../Utils/dispatchedData";
+import React, { useEffect, useState } from "react";
+import { getCategories, getRecordTable } from "../../Utils/dispatchedData";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteModal from "../Modals/DeleteModal";
-import { sortDate, sortEnrollments, sortGPA, sortKey } from "../../Services/sorters";
+import {
+  sortDate,
+  sortEnrollments,
+  sortGPA,
+  sortKey,
+} from "../../Services/sorters";
 
 let style = {
   paddingBottom: "3.5vh",
 };
 
 export type RecordType = {
-  id: any,
-  key: number,
-  name: string,
-  date: string,
-  enrollments: number,
-  gpa: number,
-}
+  id: any;
+  key: number;
+  name: string;
+  date: string;
+  enrollments: number;
+  gpa: number;
+};
+
+export type CategoryType = {
+  id: any;
+  name: string;
+};
 
 export type stateType = {
   recordState: RecordType[],
+  categoriesState: CategoryType[],
   // FIXME: Unblock on implemented input filter
-  // filterState: string, 
+  // filterState: string,
 };
 
 export type UserTablePropsType = {
@@ -31,12 +42,14 @@ export type UserTablePropsType = {
 };
 
 const UserTable = ({ setUpdate }: UserTablePropsType) => {
-  const { recordState } = useSelector((state: stateType) => ({
+  const { recordState, categories } = useSelector((state: stateType) => ({
     recordState: state.recordState,
+    categories: state.categoriesState,
   }));
   const dispatch = useDispatch();
   //!!!!
-  const recordTable = getRecordTable(recordState, dispatch);  // FIXME: Add Filtering in function "filter: string"
+  const categoriesList = getCategories(categories, dispatch);
+  const recordTable = getRecordTable(recordState, dispatch); // FIXME: Add Filtering in function "filter: string"
   const [selectedKeys, setSelectedKeys] = useState<any | []>([]);
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -60,24 +73,33 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
 
   const deleteSelected = () => {
     setUpdate(false);
-    const {selectedRowKeys} = selectedKeys;
+    const { selectedRowKeys } = selectedKeys;
     console.log(selectedRowKeys);
     setLoading(true);
     Promise.all(
-    recordTable.filter((record) => selectedRowKeys.includes(record.id))
-    .map((record) => {
-        selectedRowKeys.splice(selectedRowKeys.indexOf(record.id));
-        console.log("deleted");
-        record.onDelete();
-      }
-    )).then(() =>
-    setSelectedKeys(selectedRowKeys)).then(() =>
-    setSelected(selectedRowKeys.length)).then(() => setLoading(false)).then(() => setUpdate(true));
+      recordTable
+        .filter((record) => selectedRowKeys.includes(record.id))
+        .map((record) => {
+          selectedRowKeys.splice(selectedRowKeys.indexOf(record.id));
+          console.log("deleted");
+          record.onDelete();
+        })
+    )
+      .then(() => setSelectedKeys(selectedRowKeys))
+      .then(() => setSelected(selectedRowKeys.length))
+      .then(() => setLoading(false))
+      .then(() => setUpdate(true));
+  };
+  const advisers = [];
+  for (var i = 0; i < categories.length; i++) {
+    advisers.push({
+      text: categories[i].name,
+      value: i,
+    });
   }
-
   const enrollmentsFilters = [];
   for (var i = 1; i < 9; i++) {
-    enrollmentsFilters.push({ text: i, value: i});
+    enrollmentsFilters.push({ text: i, value: i });
   }
 
   return (
@@ -102,8 +124,7 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
           </span>
           <Table
             rowSelection={recordTable.length > 0 ? rowSelection : undefined}
-            pagination={
-            {
+            pagination={{
               position: ["topRight", "topRight"],
               pageSize: 25,
             }}
@@ -117,33 +138,38 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
               width="25%"
               render={(text: any) => <a href="/#">{text}</a>}
             />
-            <Column 
-             title={<b>ID</b>}
-             dataIndex="key"
-             key="key"
-             fixed="left"
-             width="20%"
-             defaultSortOrder="descend"
-             sorter={
-               //(a:any, b:any) => a.key - b.key
-               sortKey
+            <Column
+              title={<b>ID</b>}
+              dataIndex="key"
+              key="key"
+              fixed="left"
+              width="20%"
+              defaultSortOrder="descend"
+              sorter={
+                //(a:any, b:any) => a.key - b.key
+                sortKey
               }
             />
-            <Column 
-             title={<b>Date created</b>}
-             dataIndex="date"
-             width="20%"
-             sorter={sortDate}
+            <Column
+              title={<b>Date created</b>}
+              dataIndex="date"
+              width="20%"
+              sorter={sortDate}
             />
-            <Column 
-             title={<b>Enrollments</b>}
-             dataIndex="enrollments"
-             sorter={sortEnrollments}
-             filters={enrollmentsFilters}
-             onFilter={(value, record) => record.enrollments === value}
+            <Column
+              title={<b>Enrollments</b>}
+              dataIndex="enrollments"
+              sorter={sortEnrollments}
+              filters={enrollmentsFilters}
+              onFilter={(value, record) => record.enrollments === value}
             />
-            <Column title={<b>GPA</b>} dataIndex="gpa" 
-              sorter={sortGPA}
+            <Column title={<b>GPA</b>} dataIndex="gpa" sorter={sortGPA} />
+            <Column title={<b>Adviser</b>} dataIndex="category"
+              render={(record) => 
+                <a>{categories[record - 1].name}</a>
+              }
+              filters={advisers}
+              onFilter={(value:any, record:any) => categories[record.category - 1].name === categories[value].name}
             />
             <Column
               title={
