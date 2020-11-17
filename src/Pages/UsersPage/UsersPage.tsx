@@ -10,13 +10,11 @@ import { Divider } from "antd";
 
 const UsersPage = () => {
   const [update, setUpdate] = useState(true);
-  const [lastId, setLastId] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchRecords());
     let state = store.getState();
-    setLastId(state.recordState[state.recordState.length - 1]);
     store.subscribe(() => {
       let newState = store.getState();
       if (!isEqual(state.categoriesState, newState.categoriesState)) {
@@ -24,7 +22,6 @@ const UsersPage = () => {
       }
       if (!isEqual(state.recordState, newState.recordState) && update) {
         dispatch(fetchRecords());
-        setLastId(newState.recordState[newState.recordState.length - 1].id);
       }
       state = newState;
     });
@@ -45,7 +42,6 @@ const UsersPage = () => {
               onSave={(record) => dispatch(addRecord(record))}
               icon={undefined}
               record={undefined}
-              lastId={lastId}
             />
           </div>
         <Divider style={{ margin: "2.5vh 0" }} />

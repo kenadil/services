@@ -23,6 +23,7 @@ export type RecordType = {
   date: string;
   enrollments: number;
   gpa: number;
+  category: any;
 };
 
 export type CategoryType = {
@@ -91,14 +92,14 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
       .then(() => setUpdate(true));
   };
   const advisers = [];
-  for (var i = 0; i < categories.length; i++) {
+  for (var i = 0; i < categoriesList.length; i++) {
     advisers.push({
-      text: categories[i].name,
+      text: categoriesList[i].name,
       value: i,
     });
   }
   const enrollmentsFilters = [];
-  for (var i = 1; i < 9; i++) {
+  for (i = 1; i < 9; i++) {
     enrollmentsFilters.push({ text: i, value: i });
   }
 
@@ -165,11 +166,13 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
             />
             <Column title={<b>GPA</b>} dataIndex="gpa" sorter={sortGPA} />
             <Column title={<b>Adviser</b>} dataIndex="category"
-              render={(record) => 
-                <a>{categories[record - 1].name}</a>
+              render={(record) => record.category !== null ? 
+                <a>{categoriesList[record].name}</a> : <a>N/A</a>
               }
               filters={advisers}
-              onFilter={(value:any, record:any) => categories[record.category - 1].name === categories[value].name}
+              onFilter={(value:any, record:any) =>  
+                categoriesList[record.category].name === categoriesList[value].name
+              }
             />
             <Column
               title={

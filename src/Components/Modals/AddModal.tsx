@@ -1,17 +1,17 @@
 import { Button } from "antd";
 import Modal from "antd/lib/modal/Modal";
 import { Formik } from "formik";
-import { ResetButton, SubmitButton, Form, Input } from "formik-antd";
-import React, { useState } from "react";
+import { ResetButton, SubmitButton, Form, Input, AutoComplete } from "formik-antd";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import RecordSchema from "../../Services/validation";
-import { RecordType } from "../Users/Table";
+import { CategoryType, RecordType, stateType } from "../Users/Table";
 
 export type AddModalPropTypes = {
   title: any;
   onSave: (values: RecordType) => void;
   record: undefined | RecordType;
   icon: undefined | React.ReactNode;
-  lastId: any;
 };
 
 const AddModal = ({
@@ -19,13 +19,21 @@ const AddModal = ({
   onSave,
   icon,
   record,
-  lastId,
 }: AddModalPropTypes) => {
   const [state, setState] = useState({
     ModalText: "",
     visible: false,
     confirmLoading: false,
   });
+
+  const advisers= useSelector((state: stateType) => state.categoriesState).map(
+    (category: CategoryType) => category.name
+  );
+  const records = useSelector((state: stateType) => state.recordState);
+  const [lastId, setLastId] = useState(0);
+  useEffect(() => {
+    setLastId(records[records.length - 1] === undefined ? 0 : records[records.length - 1].id);
+  }, [records]);
 
   const showModal = () => {
     setState((prevState) => ({ ...prevState, visible: true }));
@@ -90,16 +98,26 @@ const AddModal = ({
             record
               ? record
               : {
-                  id: parseInt(lastId) + 1,
-                  key: parseInt(lastId) + 1,
+                  id: undefined,
+                  key: undefined,
                   name: undefined,
-                  date: monthNames[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear(),
+                  date:
+                    monthNames[d.getMonth()] +
+                    " " +
+                    d.getDate() +
+                    ", " +
+                    d.getFullYear(),
                   enrollments: undefined,
                   gpa: undefined,
+                  category: "N/A",
                 }
           }
           validationSchema={RecordSchema}
-          onSubmit={(values, {resetForm}) => {
+          onSubmit={(values, { resetForm }) => {
+            values.key = lastId + 1;
+            values.id = lastId + 1;
+            values.category = advisers.indexOf(values.category);
+            console.log(JSON.stringify(values));
             handleOk(values);
             resetForm({});
           }}
@@ -121,7 +139,7 @@ const AddModal = ({
                   style={{ marginTop: "1vh" }}
                   name="key"
                   placeholder="ID"
-                  value={parseInt(lastId) + 1}
+                  value={lastId === undefined ? 0 : lastId + 1}
                 />
               </Form.Item>
               <Form.Item name="enrollments">
@@ -138,6 +156,16 @@ const AddModal = ({
                   style={{ marginTop: "1vh" }}
                   name="gpa"
                   placeholder="GPA"
+                />
+              </Form.Item>
+              <Form.Item name="category">
+                <span style={{ marginLeft: "0.25vh" }}>Adviser</span>
+                <AutoComplete
+                  name="category"
+                  placeholder="Adviser"
+                  dataSource={advisers}
+                  showArrow={true}
+                  defaultValue={"N/A"}
                 />
               </Form.Item>
               <div style={{ transform: "translate(72.5%)" }}>
