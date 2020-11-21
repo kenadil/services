@@ -54,8 +54,6 @@ body {
   position: fixed;
   min-height: 100%;
   width: 17%;
-  transform: translateY(5%);
-  padding-top: 1%;
   background: #2b2257!important;
 }
 
@@ -107,4 +105,8 @@ body {
   width: 5.6vh;
   height: 2.734375vw;
   border-radius: 50%;
+}
+
+.search-field .ant-input {
+  padding-left: 1vw!important;
 }

@@ -36,7 +36,7 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
     setLastId(
       records[records.length - 1] === undefined
         ? 0
-        : records[records.length - 1].id
+        : parseInt(records[records.length - 1].id)
     );
   }, [records]);
 
@@ -126,8 +126,8 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
           }
           validationSchema={RecordSchema}
           onSubmit={(values, { resetForm }) => {
-            values.key = record === undefined ? lastId + 1 : record.id;
-            values.id = record === undefined ? lastId + 1 : record.id;
+            values.key = record === undefined ? lastId + 1 : parseInt(record.id);
+            values.id = record === undefined ? (lastId + 1).toString() : record.id;
             values.category = advisers.indexOf(autoCompleteVal);
             console.log(JSON.stringify(values));
             handleOk(values);

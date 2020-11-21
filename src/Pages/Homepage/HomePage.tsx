@@ -1,4 +1,5 @@
 import React from "react";
+import Header from "../../Components/Header/Header";
 import HomePageLayout from "../../Components/Layout/HomePage/HomePageLayout";
 import "./HomePage.css";
 
@@ -26,15 +27,21 @@ const HomePage = () => {
       });
     }
     const data = {
-      users: users
-    }
+      users: users,
+    };
     var json = JSON.stringify(data);
-    var fs = require('fs');
-    fs.writeFile('userTest.json', json, 'utf8');
+    var fs = require("fs");
+    fs.writeFile("userTest.json", json, "utf8");
   };
   return (
     <>
-      <HomePageLayout name="I AM THE STORM THAT IS APPROACHING" onClick={generateData} />
+      <Header width={"100%"}>
+        <span style={{marginLeft: "10vw"}}>Analytics</span>
+      </Header>
+      <HomePageLayout
+        name="I AM THE STORM THAT IS APPROACHING"
+        onClick={generateData}
+      />
     </>
   );
 };

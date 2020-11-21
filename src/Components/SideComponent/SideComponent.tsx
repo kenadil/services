@@ -9,6 +9,7 @@ import {
   UsergroupDeleteOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import Header from "../Header/Header";
 
 const { Panel } = Collapse;
 const iconStyle = {
@@ -16,9 +17,14 @@ const iconStyle = {
   marginRight: "5px",
 };
 
-const supportStudents = (<p style={{color: "white", marginLeft: "0.5vw", marginBottom: "0",}}>SUPPORT YOUR STUDENTS</p>);
+const supportStudents = (
+  <p style={{ color: "white", marginLeft: "0.5vw", marginBottom: "0" }}>
+    SUPPORT YOUR STUDENTS
+  </p>
+);
 
-const pfp = "https://gamespot1.cbsistatic.com/uploads/scale_landscape/1352/13527689/2744541-gg_xrd_sign_ramlethal_v_ky_ps4_112514.jpg";
+const pfp =
+  "https://gamespot1.cbsistatic.com/uploads/scale_landscape/1352/13527689/2744541-gg_xrd_sign_ramlethal_v_ky_ps4_112514.jpg";
 const SideComponent = () => {
   const labels = [
     {
@@ -65,7 +71,7 @@ const SideComponent = () => {
       label: "LOG OUT",
       icon: <ExportOutlined style={iconStyle} />,
       divided: false,
-    }
+    },
   ];
   return (
     <div
@@ -74,16 +80,25 @@ const SideComponent = () => {
       }}
       className="side-component"
     >
+      <Link to="/">
+        <Header width={"100%"}>
+          <span>Analytics</span>
+        </Header>
+      </Link>
       {labels.map((e, index) => (
         <>
           {e.label !== supportStudents ? (
             <div className="side-panel">
               <div className="side-panel-item">
                 {e.icon}
-              <a style={{marginLeft: "0.5vw", transform: "translateY(-5%)",
-                color: e.label === "LOG OUT" ? "red" : "white", 
-              }}>
-                {e.label}
+                <a
+                  style={{
+                    marginLeft: "0.5vw",
+                    transform: "translateY(-5%)",
+                    color: e.label === "LOG OUT" ? "red" : "white",
+                  }}
+                >
+                  {e.label}
                 </a>
               </div>
             </div>
@@ -123,10 +138,12 @@ const SideComponent = () => {
                 margin: "0 auto",
               }}
             >
-              <Divider style={{
-                 border: "0.1em solid rgba(245, 245, 245, 0.3)",
-                 margin: "2.5vh 0 1.5vh 0",
-              }} />
+              <Divider
+                style={{
+                  border: "0.1em solid rgba(245, 245, 245, 0.3)",
+                  margin: "2.5vh 0 1.5vh 0",
+                }}
+              />
             </div>
           ) : null}
         </>

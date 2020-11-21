@@ -1,10 +1,25 @@
+import { debug } from "console";
 import { Dispatch } from "redux";
 import { CategoryType, RecordType } from "../Components/Users/Table";
 import { changeRecordAPI, deleteRecordAPI } from "../Services/api.service";
 import { changeRecord, deleteRecord } from "../Store/Actions";
 
-export const getRecordTable = (records: RecordType[], dispatch: Dispatch) => {
-  return records.map((record: any) => ({
+export const getRecordTable = (
+    records: RecordType[],
+    filter: string,
+    categories: CategoryType[],
+    dispatch: Dispatch,
+  ) => {
+  const names = categories.map((e) => e.name);
+  filter = filter.toLowerCase();
+  return records
+    .filter(
+      (record: RecordType) => filter === "" 
+        ||  record.name.toLowerCase().includes(filter)
+        ||  record.key.toString().toLowerCase().includes(filter)
+        ||  record.category === names.indexOf(filter)
+    )
+    .map((record: any) => ({
     ...record,
     onDelete: () => {
       deleteRecordAPI(record.id)

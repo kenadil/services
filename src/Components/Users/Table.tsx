@@ -18,7 +18,7 @@ let style = {
 };
 
 export type RecordType = {
-  id: any;
+  id: string;
   key: number;
   name: string;
   date: string;
@@ -36,7 +36,7 @@ export type stateType = {
   recordState: RecordType[];
   categoriesState: CategoryType[];
   // FIXME: Unblock on implemented input filter
-  // filterState: string,
+  filterState: string;
 };
 
 export type UserTablePropsType = {
@@ -44,14 +44,15 @@ export type UserTablePropsType = {
 };
 
 const UserTable = ({ setUpdate }: UserTablePropsType) => {
-  const { recordState, categories } = useSelector((state: stateType) => ({
+  const { recordState, filterState, categories } = useSelector((state: stateType) => ({
     recordState: state.recordState,
+    filterState: state.filterState,
     categories: state.categoriesState,
   }));
   const dispatch = useDispatch();
   //!!!!
   const categoriesList = getCategories(categories, dispatch);
-  const recordTable = getRecordTable(recordState, dispatch); // FIXME: Add Filtering in function "filter: string"
+  const recordTable = getRecordTable(recordState, filterState, categories, dispatch); // FIXME: Add Filtering in function "filter: string"
   const [selectedKeys, setSelectedKeys] = useState<any | []>([]);
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -116,14 +117,6 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
         />
       ) : (
         <>
-          <span
-            style={{
-              position: "absolute",
-              transform: "translate(75%, 95%)",
-            }}
-          >
-            Selected rows: {selected}
-          </span>
           <Table
             rowSelection={recordTable.length > 0 ? rowSelection : undefined}
             pagination={{

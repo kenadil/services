@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
-import UserTable from "../../Components/Users/Table";
+import UserTable, { stateType } from "../../Components/Users/Table";
 import "./UsersPage.css";
-import {useDispatch} from "react-redux";
-import {store} from "../../Store/store";
-import {isEqual} from "lodash";
-import { addRecord, fetchCategories, fetchRecords } from "../../Store/Actions";
+import { useDispatch, useSelector } from "react-redux";
+import { store } from "../../Store/store";
+import { isEqual } from "lodash";
+import {
+  addRecord,
+  fetchCategories,
+  fetchRecords,
+  setFilter,
+} from "../../Store/Actions";
 import AddModal from "../../Components/Modals/AddModal";
-import { Divider } from "antd";
+import { Divider, Input } from "antd";
 import SideComponent from "../../Components/SideComponent/SideComponent";
+import { SearchOutlined } from "@ant-design/icons";
+
+const { Search } = Input;
 
 const UsersPage = () => {
   const [update, setUpdate] = useState(true);
@@ -30,17 +38,26 @@ const UsersPage = () => {
   return (
     <>
       <SideComponent />
-      <div className="UserTable" style={{ transform: "translateY(3%)", }}>
+      <div className="UserTable" style={{ paddingTop: "1%" }}>
         <div style={{ display: "flex", flexDirection: "row", height: "5vh" }}>
           <h1 style={{ marginRight: "84.5%" }}>Users</h1>
-            <AddModal 
-              title={<h3>Add user</h3>}
-              onSave={(record) => dispatch(addRecord(record))}
-              icon={undefined}
-              record={undefined}
-            />
-          </div>
+          <AddModal
+            title={<h3>Add user</h3>}
+            onSave={(record) => dispatch(addRecord(record))}
+            icon={undefined}
+            record={undefined}
+          />
+        </div>
         <Divider style={{ margin: "2.5vh 0" }} />
+        <Input
+            className="search-field"
+            prefix={<SearchOutlined className="site-form-item-icon" />}
+            placeholder="Search by name or ID"
+            onChange={(e) => dispatch(setFilter(e.target.value))}
+            style={{
+              marginBottom: "2vh",
+            }}
+          />
         <UserTable setUpdate={setUpdate} />
       </div>
     </>
