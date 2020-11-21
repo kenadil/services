@@ -43,3 +43,7 @@ body {
 .ant-table-pagination.ant-pagination {
   padding-right: 1.25vw;
 }
+
+.delete-link {
+  color: red;
+}

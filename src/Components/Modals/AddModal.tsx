@@ -1,7 +1,13 @@
 import { Button } from "antd";
 import Modal from "antd/lib/modal/Modal";
 import { Formik } from "formik";
-import { ResetButton, SubmitButton, Form, Input, AutoComplete } from "formik-antd";
+import {
+  ResetButton,
+  SubmitButton,
+  Form,
+  Input,
+  AutoComplete,
+} from "formik-antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import RecordSchema from "../../Services/validation";
@@ -14,26 +20,28 @@ export type AddModalPropTypes = {
   icon: undefined | React.ReactNode;
 };
 
-const AddModal = ({
-  title,
-  onSave,
-  icon,
-  record,
-}: AddModalPropTypes) => {
+const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
   const [state, setState] = useState({
     ModalText: "",
     visible: false,
     confirmLoading: false,
   });
 
-  const advisers= useSelector((state: stateType) => state.categoriesState).map(
+  const advisers = useSelector((state: stateType) => state.categoriesState).map(
     (category: CategoryType) => category.name
   );
   const records = useSelector((state: stateType) => state.recordState);
   const [lastId, setLastId] = useState(0);
   useEffect(() => {
-    setLastId(records[records.length - 1] === undefined ? 0 : records[records.length - 1].id);
+    setLastId(
+      records[records.length - 1] === undefined
+        ? 0
+        : records[records.length - 1].id
+    );
   }, [records]);
+
+  
+  const [autoCompleteVal, setAutoCompleteVal] = useState(advisers[record?.category]);
 
   const showModal = () => {
     setState((prevState) => ({ ...prevState, visible: true }));
@@ -76,16 +84,19 @@ const AddModal = ({
     "Nov",
     "Dec",
   ];
-
   return (
     <>
-      <Button
-        style={{ float: "right", transform: "translate(0%, 25%)" }}
-        onClick={() => showModal()}
-        className="purple-button"
-      >
-        Add User
-      </Button>
+      {record === undefined ? (
+        <Button
+          style={{ float: "right", transform: "translate(0%, 25%)" }}
+          onClick={() => showModal()}
+          className="purple-button"
+        >
+          Add User
+        </Button>
+      ) : (
+        <a onClick={() => showModal()}>Edit</a>
+      )}
       <Modal
         title={title}
         visible={state.visible}
@@ -96,7 +107,8 @@ const AddModal = ({
         <Formik
           initialValues={
             record
-              ? record
+              ? 
+              record
               : {
                   id: undefined,
                   key: undefined,
@@ -114,9 +126,9 @@ const AddModal = ({
           }
           validationSchema={RecordSchema}
           onSubmit={(values, { resetForm }) => {
-            values.key = lastId + 1;
-            values.id = lastId + 1;
-            values.category = advisers.indexOf(values.category);
+            values.key = record === undefined ? lastId + 1 : record.id;
+            values.id = record === undefined ? lastId + 1 : record.id;
+            values.category = advisers.indexOf(autoCompleteVal);
             console.log(JSON.stringify(values));
             handleOk(values);
             resetForm({});
@@ -166,6 +178,10 @@ const AddModal = ({
                   dataSource={advisers}
                   showArrow={true}
                   defaultValue={"N/A"}
+                  value={record === undefined ? "N/A" : advisers[record.category]}
+                  onChange={(e) => {
+                    setAutoCompleteVal(e);
+                  }}
                 />
               </Form.Item>
               <div style={{ transform: "translate(72.5%)" }}>

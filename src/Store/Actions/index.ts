@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { ADD_RECORD, DELETE_RECORD, FETCH_CATEGORIES, FETCH_RECORDS } from "./ActionType";
+import { ADD_RECORD, CHANGE_RECORD, DELETE_RECORD, FETCH_CATEGORIES, FETCH_RECORDS } from "./ActionType";
 import { addRecordAPI, fetchCategoriesAPI, fetchRecordsAPI } from "../../Services/api.service";
 import { RecordType } from "../../Components/Users/Table";
 
@@ -19,6 +19,11 @@ export const addRecord = (record: RecordType) => (dispatch: Dispatch) => {
     .then((record) => dispatch({ type: ADD_RECORD, record }))
     .catch((error) => console.log(error));
 };
+
+export const changeRecord = (record: RecordType) => ({
+  type: CHANGE_RECORD,
+  record,
+});
 
 export const fetchCategories = () => (dispatch: Dispatch) => {
   fetchCategoriesAPI()

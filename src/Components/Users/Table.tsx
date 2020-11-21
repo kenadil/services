@@ -1,4 +1,4 @@
-import { Button, Table } from "antd";
+import { Button, Dropdown, Menu, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import Loader from "react-loader-spinner";
 import React, { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import {
   sortGPA,
   sortKey,
 } from "../../Services/sorters";
+import AddModal from "../Modals/AddModal";
 
 let style = {
   paddingBottom: "3.5vh",
@@ -32,8 +33,8 @@ export type CategoryType = {
 };
 
 export type stateType = {
-  recordState: RecordType[],
-  categoriesState: CategoryType[],
+  recordState: RecordType[];
+  categoriesState: CategoryType[];
   // FIXME: Unblock on implemented input filter
   // filterState: string,
 };
@@ -165,13 +166,20 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
               onFilter={(value, record) => record.enrollments === value}
             />
             <Column title={<b>GPA</b>} dataIndex="gpa" sorter={sortGPA} />
-            <Column title={<b>Adviser</b>} dataIndex="category"
-              render={(record) => record.category !== null ? 
-                <a>{categoriesList[record].name}</a> : <a>N/A</a>
+            <Column
+              title={<b>Adviser</b>}
+              dataIndex="category"
+              render={(record) =>
+                record.category !== null ? (
+                  <a>{categoriesList[record].name}</a>
+                ) : (
+                  <a>N/A</a>
+                )
               }
               filters={advisers}
-              onFilter={(value:any, record:any) =>  
-                categoriesList[record.category].name === categoriesList[value].name
+              onFilter={(value: any, record: any) =>
+                categoriesList[record.category].name ===
+                categoriesList[value].name
               }
             />
             <Column
@@ -186,13 +194,29 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
               }
               render={(record) => (
                 <>
-                  <DeleteModal
-                    title=""
-                    text={`Delete record ${record.id}?`}
-                    onDelete={record.onDelete}
-                    buttonText="Delete"
-                    icon={undefined}
-                  />
+                  <Dropdown.Button
+                    overlay={
+                      <Menu>
+                        <Menu.Item key="1">
+                          <AddModal
+                            title="Change record"
+                            onSave={record.onChange}
+                            icon={undefined}
+                            record={record}
+                          />
+                        </Menu.Item>
+                        <Menu.Item key="2">
+                          <DeleteModal
+                            title=""
+                            text={`Delete record ${record.id}?`}
+                            onDelete={record.onDelete}
+                            buttonText="Delete"
+                            icon={undefined}
+                          />
+                        </Menu.Item>
+                      </Menu>
+                    }
+                  ></Dropdown.Button>
                 </>
               )}
               fixed="right"

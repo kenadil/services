@@ -47,3 +47,18 @@ export async function fetchCategoriesAPI() {
     }
   });
 }
+
+export async function changeRecordAPI(record: RecordType) {
+  return fetch(`${API_URL}/users/${record.id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(record),
+    headers: { "Content-Type": "application/json; charset=UTF-8" },
+  }).then(async (response) => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+  })
+}

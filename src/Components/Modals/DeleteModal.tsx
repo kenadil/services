@@ -49,14 +49,13 @@ const DeleteModal = ({
 
   return (
     <>
-      <Button
-        className="purple-button"
-        style={{ float: "right", marginRight: "1.25vw" }}
+      <a
+        style={{color:"red",}}
+        className="delete-link"
         onClick={showModal}
-        icon={icon}
       >
         {buttonText}
-      </Button>
+      </a>
       <Modal
         title={title}
         visible={state.visible}
