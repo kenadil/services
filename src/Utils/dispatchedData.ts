@@ -1,4 +1,5 @@
 import { debug } from "console";
+import { toast } from "react-toastify";
 import { Dispatch } from "redux";
 import { CategoryType, RecordType } from "../Components/Users/Table";
 import { changeRecordAPI, deleteRecordAPI } from "../Services/api.service";
@@ -24,14 +25,16 @@ export const getRecordTable = (
     onDelete: () => {
       deleteRecordAPI(record.id)
         .then(() => dispatch(deleteRecord(record.id)))
-        .catch((error) => console.log(error));
+        .then(() => toast.success("Changes successfull"))
+        .catch((error) => toast.error(error.message));
     },
     onChange: (newRecord: RecordType) => {
       changeRecordAPI(newRecord)
         .then((result: RecordType) => {
           dispatch(changeRecord(result));
         })
-        .catch((error) => console.log(error));
+        .then(() => toast.success("Changes successfull"))
+        .catch((error) => toast.error(error.message));
     },
     // FIXME: add onChange: () => dispatch(changeRecord(newRecord));
   }));

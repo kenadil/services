@@ -177,10 +177,9 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
                 <span style={{ marginLeft: "0.25vh" }}>Adviser</span>
                 <AutoComplete
                   name="category"
-                  placeholder="Adviser"
+                  placeholder="N/A"
                   options={options}
                   showArrow={true}
-                  defaultValue={"N/A"}
                   value={autoCompleteVal}
                   onChange={(e) => {
                     setAutoCompleteVal(e);

@@ -6,6 +6,7 @@ import "antd/dist/antd.css";
 import UsersPage from "./Pages/UsersPage/UsersPage";
 import { Provider } from "react-redux";
 import {store} from "./Store/store";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (

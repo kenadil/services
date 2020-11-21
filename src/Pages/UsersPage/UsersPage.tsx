@@ -14,6 +14,7 @@ import AddModal from "../../Components/Modals/AddModal";
 import { Divider, Input } from "antd";
 import SideComponent from "../../Components/SideComponent/SideComponent";
 import { SearchOutlined } from "@ant-design/icons";
+import { ToastContainer } from "react-toastify";
 
 const { Search } = Input;
 
@@ -60,6 +61,7 @@ const UsersPage = () => {
             allowClear
           />
         <UserTable setUpdate={setUpdate} />
+        <ToastContainer />
       </div>
     </>
   );
