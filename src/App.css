@@ -37,6 +37,10 @@ body {
   transform: translateY(-405%);
 }
 
+.ant-checkbox {
+  margin-left: 1vw!important;
+}
+
 .ant-table-wrapper {
   background: white;
 }
