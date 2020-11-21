@@ -7,6 +7,7 @@ import {isEqual} from "lodash";
 import { addRecord, fetchCategories, fetchRecords } from "../../Store/Actions";
 import AddModal from "../../Components/Modals/AddModal";
 import { Divider } from "antd";
+import SideComponent from "../../Components/SideComponent/SideComponent";
 
 const UsersPage = () => {
   const [update, setUpdate] = useState(true);
@@ -27,14 +28,9 @@ const UsersPage = () => {
     });
   }, [dispatch]);
   return (
-    <div style={{ display: "flex", flexDirection: "row" }}>
-      <div
-        style={{
-          minWidth: "10%",
-        }}
-      >
-      </div>
-      <div className="UserTable">
+    <>
+      <SideComponent />
+      <div className="UserTable" style={{ transform: "translateY(3%)", }}>
         <div style={{ display: "flex", flexDirection: "row", height: "5vh" }}>
           <h1 style={{ marginRight: "84.5%" }}>Users</h1>
             <AddModal 
@@ -47,7 +43,7 @@ const UsersPage = () => {
         <Divider style={{ margin: "2.5vh 0" }} />
         <UserTable setUpdate={setUpdate} />
       </div>
-    </div>
+    </>
   );
 };
 
