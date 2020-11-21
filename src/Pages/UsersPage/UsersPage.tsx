@@ -57,6 +57,7 @@ const UsersPage = () => {
             style={{
               marginBottom: "2vh",
             }}
+            allowClear
           />
         <UserTable setUpdate={setUpdate} />
       </div>

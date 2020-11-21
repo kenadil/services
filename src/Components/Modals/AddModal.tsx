@@ -8,6 +8,7 @@ import {
   Input,
   AutoComplete,
 } from "formik-antd";
+import { OptionsType } from "rc-select/lib/interface";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import RecordSchema from "../../Services/validation";
@@ -30,6 +31,8 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
   const advisers = useSelector((state: stateType) => state.categoriesState).map(
     (category: CategoryType) => category.name
   );
+  const options: OptionsType | { value: string; }[] | undefined = [];
+  advisers.map((e) => options.push({ value: e }));
   const records = useSelector((state: stateType) => state.recordState);
   const [lastId, setLastId] = useState(0);
   useEffect(() => {
@@ -175,13 +178,17 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
                 <AutoComplete
                   name="category"
                   placeholder="Adviser"
-                  dataSource={advisers}
+                  options={options}
                   showArrow={true}
                   defaultValue={"N/A"}
                   value={autoCompleteVal}
                   onChange={(e) => {
                     setAutoCompleteVal(e);
                   }}
+                  filterOption={(inputValue, option) => 
+                    option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                  }
+                  allowClear
                 />
               </Form.Item>
               <div style={{ transform: "translate(72.5%)" }}>
