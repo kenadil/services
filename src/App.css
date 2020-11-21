@@ -54,8 +54,26 @@ body {
   position: fixed;
   min-height: 100%;
   width: 17%;
-  transform: translateY(7%);
+  transform: translateY(5%);
+  padding-top: 1%;
   background: #2b2257!important;
+}
+
+.side-panel {
+  color: white;
+  font-size: 1rem;
+  margin-top: 1.5vh;
+}
+
+.side-panel-item {
+  padding-top: 1.5vh;
+  padding-left: 1.1vw;
+  display: flex;
+  flex-direction: "row";
+}
+
+.side-panel-item svg {  
+  transform: translateY(12%);
 }
 
 .ant-collapse-header {
@@ -83,4 +101,10 @@ body {
 .option-content li a {
   color: white;
   font-size: 1rem;
+}
+
+.pfp-image {
+  width: 5.6vh;
+  height: 2.734375vw;
+  border-radius: 50%;
 }
