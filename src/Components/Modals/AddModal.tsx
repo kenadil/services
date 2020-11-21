@@ -178,7 +178,7 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
                   dataSource={advisers}
                   showArrow={true}
                   defaultValue={"N/A"}
-                  value={record === undefined ? "N/A" : advisers[record.category]}
+                  value={autoCompleteVal}
                   onChange={(e) => {
                     setAutoCompleteVal(e);
                   }}
