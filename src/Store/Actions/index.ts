@@ -1,6 +1,17 @@
 import { Dispatch } from "redux";
-import { ADD_RECORD, CHANGE_RECORD, DELETE_RECORD, FETCH_CATEGORIES, FETCH_RECORDS } from "./ActionType";
-import { addRecordAPI, fetchCategoriesAPI, fetchRecordsAPI } from "../../Services/api.service";
+import {
+  ADD_RECORD,
+  CHANGE_RECORD,
+  DELETE_RECORD,
+  FETCH_CATEGORIES,
+  FETCH_RECORDS,
+  SET_FILTER,
+} from "./ActionType";
+import {
+  addRecordAPI,
+  fetchCategoriesAPI,
+  fetchRecordsAPI,
+} from "../../Services/api.service";
 import { RecordType } from "../../Components/Users/Table";
 
 export const deleteRecord = (id: number) => ({
@@ -34,4 +45,9 @@ export const fetchCategories = () => (dispatch: Dispatch) => {
       });
     })
     .catch((error) => console.log(error));
-}
+};
+
+export const setFilter = (filter: string) => ({
+  type: SET_FILTER,
+  filter,
+});

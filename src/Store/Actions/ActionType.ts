@@ -5,3 +5,5 @@ export const CHANGE_RECORD = "CHANGE_RECORD";
 export const FETCH_RECORDS = "FETCH_RECORDS";
 
 export const FETCH_CATEGORIES = "FETCH_CATEGORIES";
+
+export const SET_FILTER = "SET_FILTER";
