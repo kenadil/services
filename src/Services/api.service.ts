@@ -1,6 +1,6 @@
 import { RecordType } from "../Components/Users/Table";
 
-const API_URL = "http://localhost:3001";
+const API_URL = "http://localhost:5000";
 
 export async function fetchRecordsAPI() {
   return fetch(`${API_URL}/users`)
@@ -9,7 +9,6 @@ export async function fetchRecordsAPI() {
 }
 
 export async function deleteRecordAPI(id: number) {
-  console.log(id);
   return fetch(`${API_URL}/users/${id}`, {
     method: "DELETE",
   }).then(async (response) => {
@@ -55,6 +54,7 @@ export async function changeRecordAPI(record: RecordType) {
     headers: { "Content-Type": "application/json; charset=UTF-8" },
   }).then(async (response) => {
     if (response.ok) {
+      console.log(JSON.stringify(response));
       return response.json();
     } else {
       const error = await response.json();

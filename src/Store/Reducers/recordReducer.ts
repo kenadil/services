@@ -11,8 +11,7 @@ const recordReducer = (state: RecordType[] = [], action: any) => {
     case ADD_RECORD:
       return [...state, action.record];
     case CHANGE_RECORD:
-      return state.map((record: RecordType) => 
-        record.id === action.record.id ? action.record : record
+      return state.map((record: RecordType) => action.record
       );
     case DELETE_RECORD:
       return state.filter((record: RecordType) => record.id !== action.id);

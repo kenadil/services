@@ -1,7 +1,7 @@
 import { Button, Dropdown, Menu, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import Loader from "react-loader-spinner";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { getCategories, getRecordTable } from "../../Utils/dispatchedData";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteModal from "../Modals/DeleteModal";
@@ -52,6 +52,8 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
   const dispatch = useDispatch();
   //!!!!
   const categoriesList = getCategories(categories, dispatch);
+  const teacherList = [{ text: "N/A", value: 0, }];
+ categoriesList?.map((e) => teacherList.push( { text: e.name, value: e.id, } ));
   const recordTable = getRecordTable(recordState, filterState, categories, dispatch); // FIXME: Add Filtering in function "filter: string"
   const [selectedKeys, setSelectedKeys] = useState<any | []>([]);
   const [selected, setSelected] = useState(0);
@@ -84,7 +86,6 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
         .filter((record) => selectedRowKeys.includes(record.id))
         .map((record) => {
           selectedRowKeys.splice(selectedRowKeys.indexOf(record.id));
-          console.log("deleted");
           record.onDelete();
         })
     )
@@ -93,15 +94,8 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
       .then(() => setLoading(false))
       .then(() => setUpdate(true));
   };
-  const advisers = [];
-  for (var i = 0; i < categoriesList.length; i++) {
-    advisers.push({
-      text: categoriesList[i].name,
-      value: i,
-    });
-  }
   const enrollmentsFilters = [];
-  for (i = 1; i < 9; i++) {
+  for (var i = 1; i < 9; i++) {
     enrollmentsFilters.push({ text: i, value: i });
   }
 
@@ -158,21 +152,23 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
               filters={enrollmentsFilters}
               onFilter={(value, record) => record.enrollments === value}
             />
-            <Column title={<b>GPA</b>} dataIndex="gpa" sorter={sortGPA} />
+            <Column 
+              title={<b>GPA</b>}
+              dataIndex="gpa"
+              sorter={sortGPA}
+              render={(text, record) => text = Math.round((record.gpa + Number.EPSILON) * 100) / 100}
+            />
             <Column
               title={<b>Adviser</b>}
               dataIndex="category"
-              render={(record) =>
-                record.category !== null ? (
-                  <a>{categoriesList[record].name}</a>
-                ) : (
-                  <a>N/A</a>
-                )
+              filters={teacherList}
+              render={(text, record) =>
+                text = record.category ? teacherList[record.category].text :
+                  "N/A"
               }
-              filters={advisers}
               onFilter={(value: any, record: any) =>
-                categoriesList[record.category].name ===
-                categoriesList[value].name
+                teacherList[record.category ? record.category : 0].text ===
+                teacherList[value].text
               }
             />
             <Column

@@ -12,7 +12,7 @@ import { OptionsType } from "rc-select/lib/interface";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import RecordSchema from "../../Services/validation";
-import { CategoryType, RecordType, stateType } from "../Users/Table";
+import { RecordType, stateType } from "../Users/Table";
 
 export type AddModalPropTypes = {
   title: any;
@@ -27,10 +27,9 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
     visible: false,
     confirmLoading: false,
   });
-
-  const advisers = useSelector((state: stateType) => state.categoriesState).map(
-    (category: CategoryType) => category.name
-  );
+  const advisers = ['N/A'];
+  const advisersList = useSelector((state: stateType) => state.categoriesState);
+  advisersList?.map((e) => advisers.push(e.name));
   const options: OptionsType | { value: string; }[] | undefined = [];
   advisers.map((e) => options.push({ value: e }));
   const records = useSelector((state: stateType) => state.recordState);
@@ -44,7 +43,7 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
   }, [records]);
 
   
-  const [autoCompleteVal, setAutoCompleteVal] = useState(advisers[record?.category]);
+  const [autoCompleteVal, setAutoCompleteVal] = useState(record ? advisersList.find(e => e.id === record.category)?.name : "N/A");
 
   const showModal = () => {
     setState((prevState) => ({ ...prevState, visible: true }));
@@ -124,14 +123,14 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
                     d.getFullYear(),
                   enrollments: undefined,
                   gpa: undefined,
-                  category: "N/A",
+                  category: null,
                 }
           }
           validationSchema={RecordSchema}
           onSubmit={(values, { resetForm }) => {
             values.key = record === undefined ? lastId + 1 : parseInt(record.id);
             values.id = record === undefined ? (lastId + 1).toString() : record.id;
-            values.category = advisers.indexOf(autoCompleteVal);
+            values.category = autoCompleteVal === "N/A" ? null : advisersList.find(e => e.name === autoCompleteVal)?.id;
             console.log(JSON.stringify(values));
             handleOk(values);
             resetForm({});
@@ -180,7 +179,7 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
                   placeholder="N/A"
                   options={options}
                   showArrow={true}
-                  value={autoCompleteVal}
+                  value={autoCompleteVal === "N/A" ? "" : autoCompleteVal}
                   onChange={(e) => {
                     setAutoCompleteVal(e);
                   }}
