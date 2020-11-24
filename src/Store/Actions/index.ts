@@ -22,7 +22,8 @@ export const deleteRecord = (id: number) => ({
   id,
 });
 
-export const deleteSelected = (ids: number[]) => (dispatch: Dispatch) => {
+export const deleteSelected = (ids: any[]) => (dispatch: Dispatch) => {
+  console.log(ids);
   deleteSelectedAPI(ids)
     .then((record) => dispatch({type: DELETE_SELECTED, ids }))
     .then(() => toast.success("Changes successful!"))

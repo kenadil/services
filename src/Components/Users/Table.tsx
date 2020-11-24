@@ -13,6 +13,7 @@ import {
 } from "../../Services/sorters";
 import AddModal from "../Modals/AddModal";
 import { deleteSelected } from "../../Store/Actions";
+import DeleteSelectedModal from "../Modals/DeleteSelectedModal";
 
 let style = {
   paddingBottom: "3.5vh",
@@ -75,17 +76,13 @@ const UserTable = () => {
   };
 
   const deleteSelectedRows = () => {
-    const { selectedRowKeys } = selectedKeys;
-    console.log(selectedRowKeys);
+    const {selectedRowKeys} = selectedKeys;
+    console.log(selectedKeys);
     dispatch(deleteSelected(selectedRowKeys));
-    recordTable
-        .filter((record) => selectedRowKeys.includes(record.id))
-        .map((record) => {
-          selectedRowKeys.splice(selectedRowKeys.indexOf(record.id));
-        });
+    selectedRowKeys
+        .splice(0, selectedRowKeys.length);
     setSelectedKeys({ selectedRowKeys });
     setSelected(selectedRowKeys.length);
-    setLoading(false);
   };
   const enrollmentsFilters = [];
   for (var i = 1; i < 9; i++) {
@@ -104,9 +101,14 @@ const UserTable = () => {
         />
       ) : (
         <>
+        {
+          recordTable.length > 0 ? 
           <span className="selected-span"style={{fontSize: "1rem"}}>
             Rows selected: {selected}
           </span>
+          :
+          null
+        }
           <Table
             rowSelection={recordTable.length > 0 ? rowSelection : undefined}
             pagination={{
@@ -121,10 +123,12 @@ const UserTable = () => {
               title={<b>Full name</b>}
               dataIndex="name"
               fixed="left"
+              width={"12.5%"}
               render={(text: any) => <a href="/#">{text}</a>}
             />
             <Column
               title={<b>ID</b>}
+              width={"20%"}
               dataIndex="key"
               key="key"
               defaultSortOrder="descend"
@@ -140,6 +144,7 @@ const UserTable = () => {
             />
             <Column
               title={<b>Enrollments</b>}
+              width={"15%"}
               dataIndex="enrollments"
               sorter={sortEnrollments}
               filters={enrollmentsFilters}
@@ -147,6 +152,7 @@ const UserTable = () => {
             />
             <Column 
               title={<b>GPA</b>}
+              width={"10%"}
               dataIndex="gpa"
               sorter={sortGPA}
               render={(text, record) => text = Math.round((record.gpa + Number.EPSILON) * 100) / 100}
@@ -154,11 +160,13 @@ const UserTable = () => {
             <Column
               title={<b>Adviser</b>}
               dataIndex="category"
+              width={"7.5%"}
               filters={teacherList}
-              render={(text, record) =>
+              render={(text, record) => {
                 text = record.category ? teacherList[record.category].text :
-                  "N/A"
-              }
+                  "N/A";
+                return <a>{text}</a>
+              }}
               onFilter={(value: any, record: any) =>
                 teacherList[record.category ? record.category : 0].text ===
                 teacherList[value].text
@@ -167,12 +175,14 @@ const UserTable = () => {
             <Column
               width="8.5%"
               title={
-                <Button
-                  disabled={selected === 0}
-                  onClick={deleteSelectedRows}
-                >
-                  Delete ({selected})
-                </Button>
+                <DeleteSelectedModal
+                  title=""
+                  text={""}
+                  selected={selected}
+                  onOk={deleteSelectedRows}
+                  icon={undefined}
+                  buttonText="delete"
+                />
               }
               render={(record) => (
                 <>

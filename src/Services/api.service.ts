@@ -20,11 +20,10 @@ export async function deleteRecordAPI(id: number) {
     }
   });
 }
-export async function deleteSelectedAPI(ids: number[]) {
-  var data="(";
-  ids.map(e => data += e + ",");
-  data += ")";
-  return fetch(`${API_URL}/users/${ids}`, {
+export async function deleteSelectedAPI(ids: any[]) {
+  var data=ids.join('_');
+  console.log(data);
+  return fetch(`${API_URL}/users/${data}`, {
     method: "DELETE",
   }).then(async (response) => {
     if (response.ok) {
