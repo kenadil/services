@@ -2,6 +2,7 @@ import { Dispatch } from "redux";
 import {
   ADD_RECORD,
   CHANGE_RECORD,
+  CHANGE_SELECTED,
   DELETE_RECORD,
   DELETE_SELECTED,
   FETCH_CATEGORIES,
@@ -10,6 +11,7 @@ import {
 } from "./ActionType";
 import {
   addRecordAPI,
+  changeSelectedAPI,
   deleteSelectedAPI,
   fetchCategoriesAPI,
   fetchRecordsAPI,
@@ -23,9 +25,8 @@ export const deleteRecord = (id: number) => ({
 });
 
 export const deleteSelected = (ids: any[]) => (dispatch: Dispatch) => {
-  console.log(ids);
   deleteSelectedAPI(ids)
-    .then((record) => dispatch({type: DELETE_SELECTED, ids }))
+    .then((record) => dispatch({ type: DELETE_SELECTED, ids }))
     .then(() => toast.success("Changes successful!"))
     .catch((error) => toast.error(error));
 };
@@ -47,6 +48,15 @@ export const changeRecord = (record: RecordType) => ({
   type: CHANGE_RECORD,
   record,
 });
+
+export const changeSelected = (category: any, ids: any[]) => (
+  dispatch: Dispatch
+) => {
+  changeSelectedAPI(category, ids)
+    .then((record) => dispatch({ type: CHANGE_SELECTED, ids }))
+    .then(() => toast.success("Changes successful!"))
+    .catch((error) => toast.error(error));
+};
 
 export const fetchCategories = () => (dispatch: Dispatch) => {
   fetchCategoriesAPI()

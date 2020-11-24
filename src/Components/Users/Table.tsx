@@ -14,6 +14,7 @@ import {
 import AddModal from "../Modals/AddModal";
 import { deleteSelected } from "../../Store/Actions";
 import DeleteSelectedModal from "../Modals/DeleteSelectedModal";
+import ChangeSelectedModal from "../Modals/ChangeSelectedModal";
 
 let style = {
   paddingBottom: "3.5vh",
@@ -77,7 +78,6 @@ const UserTable = () => {
 
   const deleteSelectedRows = () => {
     const {selectedRowKeys} = selectedKeys;
-    console.log(selectedKeys);
     dispatch(deleteSelected(selectedRowKeys));
     selectedRowKeys
         .splice(0, selectedRowKeys.length);
@@ -101,6 +101,7 @@ const UserTable = () => {
         />
       ) : (
         <>
+        <div className="multibox">
         {
           recordTable.length > 0 ? 
           <span className="selected-span"style={{fontSize: "1rem"}}>
@@ -109,6 +110,15 @@ const UserTable = () => {
           :
           null
         }
+          <ChangeSelectedModal 
+            title="Change adviser"
+            selectedKeys={selectedKeys}
+            icon={undefined}
+            selected={selected}
+            setSelectedKey={setSelectedKeys}
+            setSelected={setSelected}
+          />
+        </div>
           <Table
             rowSelection={recordTable.length > 0 ? rowSelection : undefined}
             pagination={{
@@ -128,7 +138,7 @@ const UserTable = () => {
             />
             <Column
               title={<b>ID</b>}
-              width={"20%"}
+              width={"10%"}
               dataIndex="key"
               key="key"
               defaultSortOrder="descend"
@@ -140,11 +150,12 @@ const UserTable = () => {
             <Column
               title={<b>Date created</b>}
               dataIndex="date"
+              width={"15%"}
               sorter={sortDate}
             />
             <Column
               title={<b>Enrollments</b>}
-              width={"15%"}
+              width={"10%"}
               dataIndex="enrollments"
               sorter={sortEnrollments}
               filters={enrollmentsFilters}

@@ -1,7 +1,7 @@
 import { Button, Modal } from "antd";
 import React, { useState } from "react";
 
-export type DeleteModalTypes = {
+export type DeleteSelectedModalTypes = {
   text: string;
   title: string;
   buttonText: string;
@@ -17,7 +17,7 @@ const DeleteSelectedModal = ({
   icon,
   selected,
   onOk,
-}: DeleteModalTypes) => {
+}: DeleteSelectedModalTypes) => {
   const [state, setState] = useState({
     ModalText: text,
     visible: false,

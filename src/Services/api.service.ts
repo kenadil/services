@@ -21,7 +21,7 @@ export async function deleteRecordAPI(id: number) {
   });
 }
 export async function deleteSelectedAPI(ids: any[]) {
-  var data=ids.join('_');
+  var data = ids.join("_");
   console.log(data);
   return fetch(`${API_URL}/users/${data}`, {
     method: "DELETE",
@@ -68,7 +68,22 @@ export async function changeRecordAPI(record: RecordType) {
     headers: { "Content-Type": "application/json; charset=UTF-8" },
   }).then(async (response) => {
     if (response.ok) {
-      console.log(JSON.stringify(response));
+      return response.json();
+    } else {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+  });
+}
+
+export async function changeSelectedAPI(category: any, ids: any[]) {
+  var objs = ids.join("_");
+  return fetch(`${API_URL}/users/${objs}`, {
+    method: "PATCH",
+    body: JSON.stringify(category),
+    headers: { "Content-Type": "application/json; charset=UTF-8" },
+  }).then(async (response) => {
+    if (response.ok) {
       return response.json();
     } else {
       const error = await response.json();

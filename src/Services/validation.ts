@@ -7,4 +7,8 @@ const RecordSchema = Yup.object().shape({
     category: Yup.string().required("Cannot be empty!"),
 });
 
+export const ChangeCategorySchema = Yup.object().shape({ 
+    category: Yup.string().required("Cannot be empty!"),
+});
+
 export default RecordSchema;

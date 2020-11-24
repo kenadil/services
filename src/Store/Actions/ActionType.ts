@@ -3,6 +3,7 @@ export const ADD_RECORD = "ADD_RECORD";
 export const CHANGE_RECORD = "CHANGE_RECORD";
 
 export const DELETE_SELECTED = "DELETE_SELECTED";
+export const CHANGE_SELECTED = "CHANGE_SELECTED";
 
 export const FETCH_RECORDS = "FETCH_RECORDS";
 
