@@ -1,4 +1,4 @@
-import { Button, Dropdown, Menu, Table } from "antd";
+import { Dropdown, Menu, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import Loader from "react-loader-spinner";
 import React, { useState } from "react";
@@ -42,19 +42,25 @@ export type stateType = {
   filterState: string;
 };
 
-
 const UserTable = () => {
-  const { recordState, filterState, categories } = useSelector((state: stateType) => ({
-    recordState: state.recordState,
-    filterState: state.filterState,
-    categories: state.categoriesState,
-  }));
+  const { recordState, filterState, categories } = useSelector(
+    (state: stateType) => ({
+      recordState: state.recordState,
+      filterState: state.filterState,
+      categories: state.categoriesState,
+    })
+  );
   const dispatch = useDispatch();
   //!!!!
   const categoriesList = getCategories(categories, dispatch);
-  const teacherList = [{ text: "N/A", value: 0, }];
- categoriesList?.map((e) => teacherList.push( { text: e.name, value: e.id, } ));
-  const recordTable = getRecordTable(recordState, filterState, categories, dispatch); // FIXME: Add Filtering in function "filter: string"
+  const teacherList = [{ text: "N/A", value: 0 }];
+  categoriesList?.map((e) => teacherList.push({ text: e.name, value: e.id }));
+  const recordTable = getRecordTable(
+    recordState,
+    filterState,
+    categories,
+    dispatch
+  ); // FIXME: Add Filtering in function "filter: string"
   const [selectedKeys, setSelectedKeys] = useState<any | []>([]);
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -77,10 +83,9 @@ const UserTable = () => {
   };
 
   const deleteSelectedRows = () => {
-    const {selectedRowKeys} = selectedKeys;
+    const { selectedRowKeys } = selectedKeys;
     dispatch(deleteSelected(selectedRowKeys));
-    selectedRowKeys
-        .splice(0, selectedRowKeys.length);
+    selectedRowKeys.splice(0, selectedRowKeys.length);
     setSelectedKeys({ selectedRowKeys });
     setSelected(selectedRowKeys.length);
   };
@@ -101,24 +106,23 @@ const UserTable = () => {
         />
       ) : (
         <>
-        <div className="multibox">
-        {
-          recordTable.length > 0 ? 
-          <span className="selected-span"style={{fontSize: "1rem"}}>
-            Rows selected: {selected}
-          </span>
-          :
-          null
-        }
-          <ChangeSelectedModal 
-            title="Change adviser"
-            selectedKeys={selectedKeys}
-            icon={undefined}
-            selected={selected}
-            setSelectedKey={setSelectedKeys}
-            setSelected={setSelected}
-          />
-        </div>
+          <div className="multibox">
+            {recordTable.length > 0 ? (
+              <div>
+                <span className="selected-span" style={{ fontSize: "1rem" }}>
+                  Rows selected: {selected}
+                </span>
+                <ChangeSelectedModal
+                  title="Change adviser"
+                  selectedKeys={selectedKeys}
+                  icon={undefined}
+                  selected={selected}
+                  setSelectedKey={setSelectedKeys}
+                  setSelected={setSelected}
+                />
+              </div>
+            ) : null}
+          </div>
           <Table
             rowSelection={recordTable.length > 0 ? rowSelection : undefined}
             pagination={{
@@ -161,12 +165,14 @@ const UserTable = () => {
               filters={enrollmentsFilters}
               onFilter={(value, record) => record.enrollments === value}
             />
-            <Column 
+            <Column
               title={<b>GPA</b>}
               width={"10%"}
               dataIndex="gpa"
               sorter={sortGPA}
-              render={(text, record) => text = Math.round((record.gpa + Number.EPSILON) * 100) / 100}
+              render={(text, record) =>
+                (text = Math.round((record.gpa + Number.EPSILON) * 100) / 100)
+              }
             />
             <Column
               title={<b>Adviser</b>}
@@ -174,9 +180,10 @@ const UserTable = () => {
               width={"7.5%"}
               filters={teacherList}
               render={(text, record) => {
-                text = record.category ? teacherList[record.category].text :
-                  "N/A";
-                return <a>{text}</a>
+                text = record.category
+                  ? teacherList[record.category].text
+                  : "N/A";
+                return <a>{text}</a>;
               }}
               onFilter={(value: any, record: any) =>
                 teacherList[record.category ? record.category : 0].text ===

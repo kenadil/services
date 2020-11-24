@@ -6,15 +6,14 @@ import {
   ResetButton,
   SubmitButton,
   Form,
-  Input,
   AutoComplete,
 } from "formik-antd";
 import { OptionsType } from "rc-select/lib/interface";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import RecordSchema, { ChangeCategorySchema } from "../../Services/validation";
+import { ChangeCategorySchema } from "../../Services/validation";
 import { changeSelected } from "../../Store/Actions";
-import { RecordType, stateType } from "../Users/Table";
+import { stateType } from "../Users/Table";
 
 export type ChangeSelectedModalPropTypes = {
   title: any;
@@ -39,7 +38,7 @@ const ChangeSelectedModal = ({
     confirmLoading: false,
     nullification: false,
   });
-  const advisers = ["N/A"];
+  const advisers: string[] = [];
   const advisersList = useSelector((state: stateType) => state.categoriesState);
   advisersList?.map((e) => advisers.push(e.name));
   const options: OptionsType | { value: string }[] | undefined = [];
@@ -51,7 +50,7 @@ const ChangeSelectedModal = ({
     setDisabled(selected === 0);
   }, [selected]);
 
-  const [autoCompleteVal, setAutoCompleteVal] = useState("N/A");
+  const [autoCompleteVal, setAutoCompleteVal] = useState("");
 
   const showModal = (action: boolean) => {
     setState((prevState) => ({
@@ -86,11 +85,9 @@ const ChangeSelectedModal = ({
   const changeSelectedKeys = (values: any) => {
     const { selectedRowKeys } = selectedKeys;
     dispatch(changeSelected(values, selectedRowKeys));
-    selectedRowKeys.splice(0, selectedRowKeys.length);
-    setSelectedKey(selectedRowKeys);
-    setSelected(selectedRowKeys.length);
   };
 
+  const nullValue = { category: null };
   return (
     <>
       <div className="category-buttons">
@@ -132,7 +129,20 @@ const ChangeSelectedModal = ({
         onCancel={() => handleCancel()}
         footer={[<Button></Button>]}
       >
-        {
+        {state.nullification ? (
+          <>
+            <p>Unenroll selected records from their groups?</p>
+            <div>
+              <Button 
+                type="primary" style={{ marginRight: "1%" }}
+                onClick={() => handleOk(nullValue)}
+              >
+                Yes
+              </Button>
+              <Button onClick={handleCancel}>No</Button>
+            </div>
+          </>
+        ) : (
           <Formik
             initialValues={{
               category: null,
@@ -148,15 +158,7 @@ const ChangeSelectedModal = ({
               resetForm({});
             }}
           >
-            {state.nullification ? 
-            <div>
-              <Button type="primary" style={{ marginRight: "1%" }}>
-                Save
-              </Button>
-              <Button>Reset</Button>
-            </div>
-            :
-            ({ errors, touched }) => (
+            {({ errors, touched }) => (
               <Form>
                 <Form.Item name="category">
                   <span style={{ marginLeft: "0.25vh" }}>Adviser</span>
@@ -165,7 +167,7 @@ const ChangeSelectedModal = ({
                     placeholder="N/A"
                     options={options}
                     showArrow={true}
-                    value={autoCompleteVal === "N/A" ? "" : autoCompleteVal}
+                    value={autoCompleteVal}
                     onChange={(e) => {
                       setAutoCompleteVal(e);
                     }}
@@ -186,7 +188,7 @@ const ChangeSelectedModal = ({
               </Form>
             )}
           </Formik>
-        }
+        )}
       </Modal>
     </>
   );
