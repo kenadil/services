@@ -33,10 +33,6 @@ body {
   background: white!important;
 }
 
-.ant-table-thead .ant-checkbox {
-  transform: translateY(-405%);
-}
-
 .ant-checkbox {
   margin-left: 1vw!important;
 }
@@ -113,4 +109,12 @@ body {
 
 .search-field .ant-input {
   padding-left: 1vw!important;
+}
+
+.selected-span {
+  position: absolute;
+  left: 20.5vw;
+  top: 20.5vh;
+  z-index: 100;
+
 }

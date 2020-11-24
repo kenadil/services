@@ -3,21 +3,31 @@ import {
   ADD_RECORD,
   CHANGE_RECORD,
   DELETE_RECORD,
+  DELETE_SELECTED,
   FETCH_CATEGORIES,
   FETCH_RECORDS,
   SET_FILTER,
 } from "./ActionType";
 import {
   addRecordAPI,
+  deleteSelectedAPI,
   fetchCategoriesAPI,
   fetchRecordsAPI,
 } from "../../Services/api.service";
 import { RecordType } from "../../Components/Users/Table";
+import { toast } from "react-toastify";
 
 export const deleteRecord = (id: number) => ({
   type: DELETE_RECORD,
   id,
 });
+
+export const deleteSelected = (ids: number[]) => (dispatch: Dispatch) => {
+  deleteSelectedAPI(ids)
+    .then((record) => dispatch({type: DELETE_SELECTED, ids }))
+    .then(() => toast.success("Changes successful!"))
+    .catch((error) => toast.error(error));
+};
 
 export const fetchRecords = () => (dispatch: Dispatch) => {
   fetchRecordsAPI()
@@ -28,7 +38,8 @@ export const fetchRecords = () => (dispatch: Dispatch) => {
 export const addRecord = (record: RecordType) => (dispatch: Dispatch) => {
   addRecordAPI(record)
     .then((record) => dispatch({ type: ADD_RECORD, record }))
-    .catch((error) => console.log(error));
+    .then(() => toast.success("User added!"))
+    .catch((error) => toast.error(error));
 };
 
 export const changeRecord = (record: RecordType) => ({

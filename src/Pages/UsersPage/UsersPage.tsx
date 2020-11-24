@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import UserTable, { stateType } from "../../Components/Users/Table";
+import UserTable from "../../Components/Users/Table";
 import "./UsersPage.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, } from "react-redux";
 import { store } from "../../Store/store";
 import { isEqual } from "lodash";
 import {
@@ -19,7 +19,6 @@ import { ToastContainer } from "react-toastify";
 const { Search } = Input;
 
 const UsersPage = () => {
-  const [update, setUpdate] = useState(true);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchCategories());
@@ -30,7 +29,7 @@ const UsersPage = () => {
       if (!isEqual(state.categoriesState, newState.categoriesState)) {
         dispatch(fetchCategories());
       }
-      if (!isEqual(state.recordState, newState.recordState) && update) {
+      if (!isEqual(state.recordState, newState.recordState)) {
         dispatch(fetchRecords());
       }
       state = newState;
@@ -60,7 +59,7 @@ const UsersPage = () => {
             }}
             allowClear
           />
-        <UserTable setUpdate={setUpdate} />
+        <UserTable />
         <ToastContainer />
       </div>
     </>

@@ -12,6 +12,7 @@ import {
   sortKey,
 } from "../../Services/sorters";
 import AddModal from "../Modals/AddModal";
+import { deleteSelected } from "../../Store/Actions";
 
 let style = {
   paddingBottom: "3.5vh",
@@ -39,11 +40,8 @@ export type stateType = {
   filterState: string;
 };
 
-export type UserTablePropsType = {
-  setUpdate: (value: boolean) => void;
-};
 
-const UserTable = ({ setUpdate }: UserTablePropsType) => {
+const UserTable = () => {
   const { recordState, filterState, categories } = useSelector((state: stateType) => ({
     recordState: state.recordState,
     filterState: state.filterState,
@@ -76,23 +74,18 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
     onChange: onSelectedRowKeyChange,
   };
 
-  const deleteSelected = () => {
-    setUpdate(false);
+  const deleteSelectedRows = () => {
     const { selectedRowKeys } = selectedKeys;
     console.log(selectedRowKeys);
-    setLoading(true);
-    Promise.all(
-      recordTable
+    dispatch(deleteSelected(selectedRowKeys));
+    recordTable
         .filter((record) => selectedRowKeys.includes(record.id))
         .map((record) => {
           selectedRowKeys.splice(selectedRowKeys.indexOf(record.id));
-          record.onDelete();
-        })
-    )
-      .then(() => setSelectedKeys(selectedRowKeys))
-      .then(() => setSelected(selectedRowKeys.length))
-      .then(() => setLoading(false))
-      .then(() => setUpdate(true));
+        });
+    setSelectedKeys({ selectedRowKeys });
+    setSelected(selectedRowKeys.length);
+    setLoading(false);
   };
   const enrollmentsFilters = [];
   for (var i = 1; i < 9; i++) {
@@ -111,6 +104,9 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
         />
       ) : (
         <>
+          <span className="selected-span"style={{fontSize: "1rem"}}>
+            Rows selected: {selected}
+          </span>
           <Table
             rowSelection={recordTable.length > 0 ? rowSelection : undefined}
             pagination={{
@@ -119,20 +115,18 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
             }}
             dataSource={recordTable}
             style={style}
+            scroll={{ x: 1500, y: "60vh" }}
           >
             <Column
               title={<b>Full name</b>}
               dataIndex="name"
               fixed="left"
-              width="25%"
               render={(text: any) => <a href="/#">{text}</a>}
             />
             <Column
               title={<b>ID</b>}
               dataIndex="key"
               key="key"
-              fixed="left"
-              width="20%"
               defaultSortOrder="descend"
               sorter={
                 //(a:any, b:any) => a.key - b.key
@@ -142,7 +136,6 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
             <Column
               title={<b>Date created</b>}
               dataIndex="date"
-              width="20%"
               sorter={sortDate}
             />
             <Column
@@ -172,11 +165,11 @@ const UserTable = ({ setUpdate }: UserTablePropsType) => {
               }
             />
             <Column
+              width="8.5%"
               title={
                 <Button
                   disabled={selected === 0}
-                  style={{ float: "right", marginRight: "1.25vw" }}
-                  onClick={deleteSelected}
+                  onClick={deleteSelectedRows}
                 >
                   Delete ({selected})
                 </Button>

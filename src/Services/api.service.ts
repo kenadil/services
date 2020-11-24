@@ -20,6 +20,21 @@ export async function deleteRecordAPI(id: number) {
     }
   });
 }
+export async function deleteSelectedAPI(ids: number[]) {
+  var data="(";
+  ids.map(e => data += e + ",");
+  data += ")";
+  return fetch(`${API_URL}/users/${ids}`, {
+    method: "DELETE",
+  }).then(async (response) => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      const error = await response.json();
+      console.log(error);
+    }
+  });
+}
 
 export async function addRecordAPI(record: RecordType) {
   return fetch(`${API_URL}/users`, {

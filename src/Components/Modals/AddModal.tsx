@@ -112,8 +112,8 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
               ? 
               record
               : {
-                  id: lastId + 1,
-                  key: lastId + 1,
+                  id: lastId,
+                  key: lastId,
                   name: undefined,
                   date:
                     monthNames[d.getMonth()] +
