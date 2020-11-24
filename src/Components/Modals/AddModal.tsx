@@ -36,9 +36,9 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
   const [lastId, setLastId] = useState(0);
   useEffect(() => {
     setLastId(
-      records[records.length - 1] === undefined
-        ? 0
-        : parseInt(records[records.length - 1].id)
+      record
+        ? parseInt(record.id)
+        : parseInt(records[records.length - 1]?.id + 1)
     );
   }, [records]);
 
@@ -112,8 +112,8 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
               ? 
               record
               : {
-                  id: undefined,
-                  key: undefined,
+                  id: lastId + 1,
+                  key: lastId + 1,
                   name: undefined,
                   date:
                     monthNames[d.getMonth()] +
@@ -128,8 +128,7 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
           }
           validationSchema={RecordSchema}
           onSubmit={(values, { resetForm }) => {
-            values.key = record === undefined ? lastId + 1 : parseInt(record.id);
-            values.id = record === undefined ? (lastId + 1).toString() : record.id;
+            values.id = (values.key)?.toString();
             values.category = autoCompleteVal === "N/A" ? null : advisersList.find(e => e.name === autoCompleteVal)?.id;
             console.log(JSON.stringify(values));
             handleOk(values);
@@ -153,7 +152,7 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
                   style={{ marginTop: "1vh" }}
                   name="key"
                   placeholder="ID"
-                  value={lastId === undefined ? 0 : lastId + 1}
+                  value={record ? lastId : lastId + 1}
                 />
               </Form.Item>
               <Form.Item name="enrollments">
