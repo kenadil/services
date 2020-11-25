@@ -90,7 +90,7 @@ const UserTable = () => {
     setSelected(selectedRowKeys.length);
   };
   const enrollmentsFilters = [];
-  for (var i = 1; i < 9; i++) {
+  for (var i = 1; i < 5; i++) {
     enrollmentsFilters.push({ text: i, value: i });
   }
 
