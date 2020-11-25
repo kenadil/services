@@ -158,7 +158,7 @@ const UserTable = () => {
               sorter={sortDate}
             />
             <Column
-              title={<b>Enrollments</b>}
+              title={<b>Course</b>}
               width={"10%"}
               dataIndex="enrollments"
               sorter={sortEnrollments}

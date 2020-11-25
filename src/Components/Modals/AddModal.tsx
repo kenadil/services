@@ -156,7 +156,7 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
                 />
               </Form.Item>
               <Form.Item name="enrollments">
-                <span style={{ marginLeft: "0.25vh" }}>Enrollments</span>
+                <span style={{ marginLeft: "0.25vh" }}>Course</span>
                 <Input
                   style={{ marginTop: "1vh" }}
                   name="enrollments"
