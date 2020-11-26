@@ -7,8 +7,8 @@ import recordReducer from "./recordReducer";
 const rootReducer = combineReducers({
     recordState: recordReducer,
     categoriesState: categoryReducer,
-    filterState: filterReducer,
     logsState: logsReducer,
+    filterState: filterReducer,
 });
 
 export default rootReducer;

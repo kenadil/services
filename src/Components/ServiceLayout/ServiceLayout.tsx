@@ -1,9 +1,11 @@
 import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Layout } from "antd";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { chartDatas } from "../../Services/chartDatas";
+import { getCategories, getLogs } from "../../Utils/dispatchedData";
 import ServiceChart from "../Charts/ServiceChart";
+import { stateType } from "../Users/Table";
 
 const { Content } = Layout;
 
@@ -14,6 +16,11 @@ export type ServiceLayoutProps = {
 
 const ServiceLayout = ({contracted, onDelete}:ServiceLayoutProps) => {
   const dispatch = useDispatch();
+  const { logState, categories } = useSelector((state: stateType) => ({
+    logState: state.logState,
+    categories: state.categoriesState,
+  }));
+  const advisers = getCategories(categories, dispatch);
   const [chartData, setChartData] = useState<any>([]);
   const chart = () => {
     setChartData(chartDatas);
@@ -38,6 +45,7 @@ const ServiceLayout = ({contracted, onDelete}:ServiceLayoutProps) => {
             contracted={contracted}
             data={chartData}
             onDelete={onDelete}
+            advisers={advisers}
           />
         </Content>
       </Layout>

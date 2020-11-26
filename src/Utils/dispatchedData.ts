@@ -50,7 +50,7 @@ export const getCategories = (
 };
 
 export const getLogs = (logs: LogsType[], dispatch: Dispatch) => {
-  return logs.map((logs: LogsType) => ({
-    ...logs,
+  return logs?.map((log: LogsType) => ({
+    ...log,
   }));
 };

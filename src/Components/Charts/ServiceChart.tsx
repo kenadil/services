@@ -36,6 +36,7 @@ const ServiceChart = (props: any) => {
         <AutoComplete
           className="advisers-select"
           placeholder="All"
+          dataSource={props.advisers}
           style={
             props.contracted
               ? { width: "15vw", marginRight: "1.5%" }

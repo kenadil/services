@@ -9,14 +9,9 @@ export async function fetchRecordsAPI() {
 }
 
 export async function fetchLogsAPI() {
-  return fetch(`${API_URL}/logs`).then(async (response) => {
-    if (response.ok) {
-      return response.json();
-    } else {
-      const error = await response.json();
-      throw new Error(error);
-    }
-  });
+  return fetch(`${API_URL}/logs`)
+    .then((response) => response.json())
+    .catch((error: any) => console.log(error));
 }
 
 export async function deleteRecordAPI(id: number) {
