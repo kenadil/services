@@ -35,6 +35,12 @@ export type CategoryType = {
   name: string;
 };
 
+export type LogsType = {
+  id: any,
+  name: string,
+  date: string,
+};
+
 export type stateType = {
   recordState: RecordType[];
   categoriesState: CategoryType[];

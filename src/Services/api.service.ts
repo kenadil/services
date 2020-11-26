@@ -8,6 +8,17 @@ export async function fetchRecordsAPI() {
     .catch((error: any) => console.log(error)); //FIXME: unlock on db maintenance
 }
 
+export async function fetchLogsAPI() {
+  return fetch(`${API_URL}/logs`).then(async (response) => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      const error = await response.json();
+      throw new Error(error);
+    }
+  });
+}
+
 export async function deleteRecordAPI(id: number) {
   return fetch(`${API_URL}/users/${id}`, {
     method: "DELETE",

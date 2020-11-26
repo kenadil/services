@@ -6,6 +6,7 @@ import {
   DELETE_RECORD,
   DELETE_SELECTED,
   FETCH_CATEGORIES,
+  FETCH_LOGS,
   FETCH_RECORDS,
   SET_FILTER,
 } from "./ActionType";
@@ -14,6 +15,7 @@ import {
   changeSelectedAPI,
   deleteSelectedAPI,
   fetchCategoriesAPI,
+  fetchLogsAPI,
   fetchRecordsAPI,
 } from "../../Services/api.service";
 import { RecordType } from "../../Components/Users/Table";
@@ -64,6 +66,17 @@ export const fetchCategories = () => (dispatch: Dispatch) => {
       dispatch({
         type: FETCH_CATEGORIES,
         categories,
+      });
+    })
+    .catch((error) => console.log(error));
+};
+
+export const fetchLogs = () => (dispatch: Dispatch) => {
+  fetchLogsAPI()
+    .then((logs) => {
+      dispatch({
+        type: FETCH_LOGS,
+        logs,
       });
     })
     .catch((error) => console.log(error));

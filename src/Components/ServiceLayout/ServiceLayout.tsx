@@ -1,26 +1,22 @@
-import { Dropdown, Layout } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
+import { Button, Layout } from "antd";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { chartDatas } from "../../Services/chartDatas";
 import ServiceChart from "../Charts/ServiceChart";
-import { stateType } from "../Users/Table";
 
 const { Content } = Layout;
 
-const ServiceLayout = () => {
+export type ServiceLayoutProps = {
+  contracted: boolean,
+  onDelete: (e: any) => void;
+};
+
+const ServiceLayout = ({contracted, onDelete}:ServiceLayoutProps) => {
   const dispatch = useDispatch();
-  const [chartData, setChartData] = useState({});
+  const [chartData, setChartData] = useState<any>([]);
   const chart = () => {
-    setChartData({
-      labels: ["Deleted", "Updated", "Added"],
-      datasets: [
-        {
-          label: "Number of records",
-          data: [100, 13, 500],
-          backgroundColor: ['rgba(255, 0, 0, 0.5)', 'rgba(128, 0, 128, 0.5)', 'rgba(0, 128, 0, 0.5)'],
-          borderWidth: 4,
-        },
-      ],
-    });
+    setChartData(chartDatas);
   };
   useEffect(() => {
     chart();
@@ -29,14 +25,20 @@ const ServiceLayout = () => {
   return (
     <>
       <Layout>
-        <Content
-          className="site-layout-background"
-          style={{ marginBottom: "1.5vh" }}
-        >
-          Sorters
-        </Content>
         <Content className="site-layout-background">
-          <ServiceChart data={chartData} />
+          {contracted ? (
+            <Button
+              style={{ float: "right", marginRight: "5%", marginTop: "4.4%" }}
+              onClick={onDelete}
+            >
+              <DeleteOutlined />
+            </Button>
+          ) : null}
+          <ServiceChart
+            contracted={contracted}
+            data={chartData}
+            onDelete={onDelete}
+          />
         </Content>
       </Layout>
     </>
