@@ -66,6 +66,10 @@ body {
   margin-top: 1.5vh;
 }
 
+.side-panel a {
+  color: white;
+}
+
 .side-panel-item {
   padding-top: 1.5vh;
   padding-left: 1.1vw;
@@ -135,4 +139,8 @@ body {
 .category-buttons {
   position: absolute;
   transform: translate(175%, -77.5%);
+}
+
+.site-layout-background {
+  background: #fff;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import UserTable from "../../Components/Users/Table";
 import "./UsersPage.css";
 import { useDispatch, } from "react-redux";
@@ -15,8 +15,6 @@ import { Divider, Input } from "antd";
 import SideComponent from "../../Components/SideComponent/SideComponent";
 import { SearchOutlined } from "@ant-design/icons";
 import { ToastContainer } from "react-toastify";
-
-const { Search } = Input;
 
 const UsersPage = () => {
   const dispatch = useDispatch();
@@ -38,7 +36,7 @@ const UsersPage = () => {
   return (
     <>
       <SideComponent />
-      <div className="UserTable" style={{ paddingTop: "1%" }}>
+      <div className="pageContent" style={{ paddingTop: "1%" }}>
         <div style={{ display: "flex", flexDirection: "row", height: "5vh" }}>
           <h1 style={{ marginRight: "84.5%" }}>Users</h1>
           <AddModal

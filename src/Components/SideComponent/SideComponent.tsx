@@ -31,12 +31,13 @@ const SideComponent = () => {
       label: "HOMEPAGE",
       icon: <HomeFilled style={iconStyle} />,
       divided: false,
-      link: "/",
+      link: "",
     },
     {
       label: "ADVANCED REPORTING",
       icon: <PieChartOutlined style={iconStyle} />,
       divided: false,
+      link: "services"
     },
     {
       label: supportStudents,
@@ -98,7 +99,11 @@ const SideComponent = () => {
                     color: e.label === "LOG OUT" ? "red" : "white",
                   }}
                 >
-                  {e.label}
+                <Link to={`/${e.link}`}>
+                  <div>
+                   {e.label}
+                  </div>
+                </Link>
                 </a>
               </div>
             </div>

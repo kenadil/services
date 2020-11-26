@@ -7,6 +7,7 @@ import UsersPage from "./Pages/UsersPage/UsersPage";
 import { Provider } from "react-redux";
 import {store} from "./Store/store";
 import "react-toastify/dist/ReactToastify.css";
+import ServicePage from "./Pages/ServicePage/ServicePage";
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
         <Switch>
           <Route path="/users">
             <UsersPage />
+          </Route>
+          <Route path="/services">
+            <ServicePage />
           </Route>
           <Route path="/">
             <HomePage />
