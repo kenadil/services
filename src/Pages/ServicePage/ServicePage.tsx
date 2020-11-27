@@ -1,16 +1,17 @@
-import { Button, Col, Divider, Row } from "antd";
+import { AutoComplete, Button, Col, Divider, Row, Select } from "antd";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { Bar, Line, Doughnut } from "react-chartjs-2";
+import { useDispatch, useSelector } from "react-redux";
+import ServiceChart from "../../Components/Charts/ServiceChart";
 import ServiceLayout from "../../Components/ServiceLayout/ServiceLayout";
 import SideComponent from "../../Components/SideComponent/SideComponent";
+import { stateType } from "../../Components/Users/Table";
+import { API_URL } from "../../Services/api.service";
 import { fetchCategories } from "../../Store/Actions";
+import { getCategories } from "../../Utils/dispatchedData";
 import { makeid } from "../../Utils/randomString";
 
 const ServicePage = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
   const [chartLength, setChartLength] = useState(1);
   const [chartGrids, setChartGrids] = useState<any[]>([]);
   const addChart = () => {
@@ -18,14 +19,12 @@ const ServicePage = () => {
     temp.push({
       key: makeid(9),
     });
-    console.log(temp);
     setChartLength(temp.length);
     setChartGrids(temp);
   };
   const deleteChart = (e: any) => {
     let temp = chartGrids;
     temp = temp.filter((el) => el.key !== e.key);
-    console.log(temp);
     setChartLength(temp.length);
     setChartGrids(temp);
   };
@@ -37,6 +36,7 @@ const ServicePage = () => {
     ];
     setChartGrids(charts);
   }, []);
+  const [url, setUrl] = useState("");
   return (
     <>
       <SideComponent />

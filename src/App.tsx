@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import {store} from "./Store/store";
 import "react-toastify/dist/ReactToastify.css";
 import ServicePage from "./Pages/ServicePage/ServicePage";
+import "./Components/Charts/ServiceChart.css";
 
 function App() {
   return (
