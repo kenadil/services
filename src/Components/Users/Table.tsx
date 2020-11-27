@@ -35,17 +35,9 @@ export type CategoryType = {
   name: string;
 };
 
-export type LogsType = {
-  id: any;
-  name: number;
-  date: string;
-  category: any;
-};
-
 export type stateType = {
   recordState: RecordType[];
   categoriesState: CategoryType[];
-  logState: LogsType[];
   // FIXME: Unblock on implemented input filter
   filterState: string;
 };

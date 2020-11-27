@@ -10,5 +10,3 @@ export const FETCH_RECORDS = "FETCH_RECORDS";
 export const FETCH_CATEGORIES = "FETCH_CATEGORIES";
 
 export const SET_FILTER = "SET_FILTER";
-
-export const FETCH_LOGS = "FETCH_LOGS";

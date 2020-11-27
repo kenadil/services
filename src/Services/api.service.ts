@@ -1,17 +1,11 @@
 import { RecordType } from "../Components/Users/Table";
 
-const API_URL = "http://localhost:5000";
+export const API_URL = "http://localhost:5000";
 
 export async function fetchRecordsAPI() {
   return fetch(`${API_URL}/users`)
     .then((response) => response.json())
     .catch((error: any) => console.log(error)); //FIXME: unlock on db maintenance
-}
-
-export async function fetchLogsAPI() {
-  return fetch(`${API_URL}/logs`)
-    .then((response) => response.json())
-    .catch((error: any) => console.log(error));
 }
 
 export async function deleteRecordAPI(id: number) {

@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import { Dispatch } from "redux";
-import { CategoryType, LogsType, RecordType } from "../Components/Users/Table";
+import { CategoryType, RecordType } from "../Components/Users/Table";
 import { changeRecordAPI, deleteRecordAPI } from "../Services/api.service";
 import { changeRecord, deleteRecord } from "../Store/Actions";
 
@@ -46,11 +46,5 @@ export const getCategories = (
 ) => {
   return categories.map((category: CategoryType) => ({
     ...category,
-  }));
-};
-
-export const getLogs = (logs: LogsType[], dispatch: Dispatch) => {
-  return logs?.map((log: LogsType) => ({
-    ...log,
   }));
 };
