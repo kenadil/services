@@ -1,24 +1,45 @@
 import { AutoComplete, Select } from "antd";
 import React, { useState } from "react";
-import { Bar, Doughnut } from "react-chartjs-2";
+import { Bar, Doughnut, Line } from "react-chartjs-2";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategories } from "../../Utils/dispatchedData";
+import { stateType } from "../Users/Table";
 import "./ServiceChart.css";
 
 const { Option } = Select;
 
 const ServiceChart = (props: any) => {
+  const dispatch = useDispatch();
+  const {categories} = useSelector((state: stateType) => ({
+    categories: state.categoriesState,
+  }));
+  const advisersList = getCategories(categories, dispatch);
+  console.log(advisersList);
+  const advisers: string[] = [];
+  advisersList.map(e => advisers.push(e.name));
   const charts = [
     {
       name: "Bar",
-      element: <Bar data={props.data} width={100} height={45} />,
+      key: 0,
+      element: <Bar data={props.data[0]} width={100} height={45} />,
+    },
+    {
+      name: "Line",
+      key: 1,
+      element: <Line data={props.data[1]} width={100} height={45} />,
     },
     {
       name: "Doughnut",
-      element: <Doughnut data={props.data} width={100} height={45} />,
+      key: 2,
+      element: <Doughnut data={props.data[2]} width={100} height={45} />,
     },
   ];
-  const [bar, setBar] = useState(true);
+  const [bar, setBar] = useState<any>(
+    <Bar data={props.data[0]} width={100} height={45} />
+  );
   const changeBar = (value: any) => {
-    setBar(value === "Bar");
+    const element = charts.find(e => e.name === value)?.element;
+    setBar(element);
   };
   return (
     <>
@@ -36,20 +57,17 @@ const ServiceChart = (props: any) => {
         <AutoComplete
           className="advisers-select"
           placeholder="All"
-          dataSource={props.advisers}
+          dataSource={advisers}
           style={
             props.contracted
               ? { width: "15vw", marginRight: "1.5%" }
               : { width: "15vw" }
           }
+          onChange={(e) => props.setUrl(advisersList.find(el => el.name === e)?.id)}
         />
       </div>
       <div className="bar-content">
-        {bar ? (
-          <Bar data={props.data[0]} width={100} height={45} />
-        ) : (
-          <Doughnut data={props.data[1]} width={100} height={45} />
-        )}
+        {bar}
       </div>
     </>
   );

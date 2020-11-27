@@ -2,11 +2,8 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Layout } from "antd";
 import React, { useEffect, useState } from "react";
 import Loader from "react-loader-spinner";
-import { useDispatch, useSelector } from "react-redux";
 import { API_URL } from "../../Services/api.service";
-import { getCategories } from "../../Utils/dispatchedData";
 import ServiceChart from "../Charts/ServiceChart";
-import { stateType } from "../Users/Table";
 
 const { Content } = Layout;
 
@@ -16,16 +13,17 @@ export type ServiceLayoutProps = {
 };
 
 const ServiceLayout = ({ contracted, onDelete }: ServiceLayoutProps) => {
+  const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
-  const { categories } = useSelector((state: stateType) => ({
-    categories: state.categoriesState,
-  }));
-  const advisers = getCategories(categories, dispatch);
   const [chartData, setChartData] = useState<any>([]);
   async function getAll() {
     setLoading(true);
-    const response = await fetch(`${API_URL}/logs/barchart/all`);
+    const response = await fetch(
+      url === "" ?
+      `${API_URL}/logs/barchart/all`
+      :
+      `${API_URL}/logs/barchart/${url}`
+    );
     const barchartData = await response.json();
     setLoading(false);
     return barchartData;
@@ -60,7 +58,12 @@ const ServiceLayout = ({ contracted, onDelete }: ServiceLayoutProps) => {
           records: data.records,
         })
       );
-    console.log(json);
+    const deleteRecords: number[] = [];
+    deleteData.map(e => deleteRecords.push(e.records));
+    const updateRecords: number[] = [];
+    updateData.map(e => updateRecords.push(e.records));
+    const addRecords: number[] = [];
+    addData.map(e => addRecords.push(e.records));
     const chartDatas = [
       {
         labels: ["Activity"],
@@ -86,11 +89,37 @@ const ServiceLayout = ({ contracted, onDelete }: ServiceLayoutProps) => {
         ],
       },
       {
+        labels: ["August", "October", "November", "December"],
+        datasets: [
+          {
+            label: "Deleted",
+            borderColor: ['red'],
+            backgroundColor: ['rgba(255, 0, 0, 0)'],
+            data: deleteRecords,
+          },
+          {
+            label: "Updated",
+            borderdColor: ['purple'],
+            backgroundColor: ['rgba(128, 0, 128, 0)'],
+            data: updateRecords,
+          },
+          {
+            label: "Added",
+            borderdColor: ['green'],
+            backgroundColor: ['rgba(0, 128, 0, 0)'],
+            data: addRecords,
+          },
+        ]
+      },
+      {
         labels: ["Deleted", "Updated", "Added"],
         datasets: [
           {
             label: "Deleted",
-            data: [100, 13, 500],
+            data: [
+              deleteData.reduce((prev, cur) => prev + cur.records, 0),
+              updateData.reduce((prev, cur) => prev + cur.records, 0), 
+              addData.reduce((prev, cur) => prev + cur.records, 0)],
             backgroundColor: [
               "rgba(255, 0, 0, 0.5)",
               "rgba(128, 0, 128, 0.5)",
@@ -106,7 +135,7 @@ const ServiceLayout = ({ contracted, onDelete }: ServiceLayoutProps) => {
         contracted={contracted}
         data={chartDatas}
         onDelete={onDelete}
-        advisers={advisers}
+        changeUrl={setUrl}
       />
     );
   };
@@ -114,7 +143,10 @@ const ServiceLayout = ({ contracted, onDelete }: ServiceLayoutProps) => {
     getAll()
       .then((json) => showAll(json));
   }, []);
-  //const advisersList = useSelector((state: stateType) => state.categoriesState);
+  useEffect(() => {
+    getAll()
+      .then((json) => showAll(json));
+  }, [url]);
   return loading ? <Loader type="Bars" color="#00BFF" height={80} width={80} /> : (
     <>
       <Layout>

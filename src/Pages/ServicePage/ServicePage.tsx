@@ -1,10 +1,16 @@
 import { Button, Col, Divider, Row } from "antd";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import ServiceLayout from "../../Components/ServiceLayout/ServiceLayout";
 import SideComponent from "../../Components/SideComponent/SideComponent";
+import { fetchCategories } from "../../Store/Actions";
 import { makeid } from "../../Utils/randomString";
 
 const ServicePage = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
   const [chartLength, setChartLength] = useState(1);
   const [chartGrids, setChartGrids] = useState<any[]>([]);
   const addChart = () => {
