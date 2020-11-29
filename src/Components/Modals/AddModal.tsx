@@ -112,7 +112,7 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
               record
               : {
                   id: undefined,
-                  key: undefined,
+                  email: undefined,
                   name: undefined,
                   date:
                     monthNames[d.getMonth()] +
@@ -126,7 +126,8 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
           }
           validationSchema={RecordSchema}
           onSubmit={(values, { resetForm }) => {
-            values.id = (lastId);
+            if (!record) 
+              values.id = (lastId);
             values.category = autoCompleteVal === "N/A" ? null : advisersList.find(e => e.name === autoCompleteVal)?.id;
             setAutoCompleteVal("N/A");
             console.log(JSON.stringify(values));
@@ -136,6 +137,16 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
         >
           {({ errors, touched }) => (
             <Form>
+              <Form.Item name="id">
+                <span style={{ marginLeft: "0.25vh" }}>ID</span>
+                <Input
+                  disabled
+                  style={{ marginTop: "1vh" }}
+                  name="id"
+                  placeholder="ID"
+                  value={record ? record.id : lastId}
+                />
+              </Form.Item>
               <Form.Item name="name">
                 <span style={{ marginLeft: "0.25vh" }}>Full name</span>
                 <Input
@@ -148,7 +159,7 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
                 <span style={{ marginLeft: "0.25vh" }}>E-mail</span>
                 <Input
                   style={{ marginTop: "1vh" }}
-                  name="key"
+                  name="email"
                   placeholder="E-mail"
                 />
               </Form.Item>

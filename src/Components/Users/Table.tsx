@@ -21,7 +21,7 @@ let style = {
 
 export type RecordType = {
   id: number;
-  key: string;
+  email: string;
   name: string;
   date: string;
   gpa: number;
@@ -59,6 +59,10 @@ const UserTable = () => {
     categories,
     dispatch
   ); // FIXME: Add Filtering in function "filter: string"
+  const recordData = [];
+  recordTable.map((e) => 
+    e.key = e.id
+  );
   const [selectedKeys, setSelectedKeys] = useState<any | []>([]);
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -130,15 +134,15 @@ const UserTable = () => {
             <Column
               title={<b>Full name</b>}
               dataIndex="name"
+              key="key"
               fixed="left"
               width={"12.5%"}
               render={(text: any) => <a href="/#">{text}</a>}
             />
             <Column
-              title={<b>ID</b>}
+              title={<b>Email</b>}
               width={"10%"}
-              dataIndex="key"
-              key="key"
+              dataIndex="email"
               sorter={
                 //(a:any, b:any) => a.key - b.key
                 sortKey

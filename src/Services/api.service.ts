@@ -22,7 +22,7 @@ export async function deleteRecordAPI(id: number) {
 }
 export async function deleteSelectedAPI(ids: any[]) {
   var data = ids.join(",");
-  return fetch(`${API_URL}/users/${data}`, {
+  return fetch(`${API_URL}/users/selected/${data}`, {
     method: "DELETE",
   }).then(async (response) => {
     if (response.ok) {

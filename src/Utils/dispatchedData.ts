@@ -17,7 +17,7 @@ export const getRecordTable = (
       (record: RecordType) =>
         filter === "" ||
         record.name.toLowerCase().includes(filter) ||
-        record.key.toString().toLowerCase().includes(filter) ||
+        record.email.toLowerCase().includes(filter) ||
         record.category === names.indexOf(filter)
     )
     .map((record: any) => ({
