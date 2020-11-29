@@ -6,10 +6,8 @@ import { Line } from "react-chartjs-2";
 import Loader from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { API_URL } from "../../Services/api.service";
-import { chartDatas } from "../../Services/chartDatas";
 import { fetchCategories } from "../../Store/Actions";
 import { getCategories } from "../../Utils/dispatchedData";
-import ServiceChart from "../Charts/ServiceChart";
 import { stateType } from "../Users/Table";
 
 const { Content } = Layout;
@@ -42,43 +40,39 @@ const ServiceLayout = ({ contracted, onDelete }: ServiceLayoutProps) => {
       )
       .then((rec) => {
         const json = rec.data;
-        //const barchartData = await response.json();
+        console.log(json);
         setLoading(false);
-        //return barchartData;
-        json.sort((a: any, b: any) => {
+        /*json.sort((a: any, b: any) => {
           return new Date(a.date) > new Date(b.date) ? 1 : -1;
-        });
+        });*/
         const dates: string | any[] = [];
         for (var i = 0; i < json.length; i++) {
-          if (!dates.includes(json[i].date)) {
-            dates.push(json[i].date);
+          if (!dates.includes(json[i].MONTH)) {
+            dates.push(json[i].MONTH);
           }
         }
-        const deleteData: { date: any; records: number }[] = [];
+        const deleteData: { records: number }[] = [];
         json
-          .filter((e: any) => e.name === 3)
+          .filter((e: any) => e.ACTIONAUTH === 3)
           .map((data: any) =>
             deleteData.push({
-              date: data.date,
-              records: data.records,
+              records: data.RECORDS,
             })
           );
-        const updateData: { date: any; records: any }[] = [];
+        const updateData: { records: any }[] = [];
         json
-          .filter((e: { name: number }) => e.name === 2)
+          .filter((e: { ACTIONAUTH: number }) => e.ACTIONAUTH === 2)
           .map((data: any) =>
             updateData.push({
-              date: data.date,
-              records: data.records,
+              records: data.RECORDS,
             })
           );
-        const addData: { date: any; records: any }[] = [];
+        const addData: { records: any }[] = [];
         json
-          .filter((e: { name: number }) => e.name === 1)
+          .filter((e: { ACTIONAUTH: number }) => e.ACTIONAUTH === 1)
           .map((data: any) =>
             addData.push({
-              date: data.date,
-              records: data.records,
+              records: data.RECORDS,
             })
           );
         const deleteRecords: number[] = [];
@@ -113,7 +107,7 @@ const ServiceLayout = ({ contracted, onDelete }: ServiceLayoutProps) => {
             ],
           },*/
           {
-            labels: ["June", "August", "September", "October"],
+            labels: dates, //["June", "August", "September", "October"],
             datasets: [
               {
                 label: "Deleted",
@@ -123,7 +117,7 @@ const ServiceLayout = ({ contracted, onDelete }: ServiceLayoutProps) => {
               },
               {
                 label: "Updated",
-                borderdColor: ["purple"],
+                borderdColor: ["red"],
                 backgroundColor: ["rgba(128, 0, 128, 0)"],
                 data: updateRecords,
               },
