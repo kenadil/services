@@ -84,6 +84,7 @@ const ChangeSelectedModal = ({
   const dispatch = useDispatch();
   const changeSelectedKeys = (values: any) => {
     const { selectedRowKeys } = selectedKeys;
+    console.log(selectedRowKeys);
     dispatch(changeSelected(values, selectedRowKeys));
   };
 
@@ -131,7 +132,7 @@ const ChangeSelectedModal = ({
       >
         {state.nullification ? (
           <>
-            <p>Unenroll selected records from their groups?</p>
+            <p>Unenroll selected records from their courses?</p>
             <div>
               <Button 
                 type="primary" style={{ marginRight: "1%" }}

@@ -40,7 +40,7 @@ const UsersPage = () => {
         <div style={{ display: "flex", flexDirection: "row", height: "5vh" }}>
           <h1 style={{ marginRight: "84.5%" }}>Users</h1>
           <AddModal
-            title={<h3>Add user</h3>}
+            title={<h3>Add record</h3>}
             onSave={(record) => dispatch(addRecord(record))}
             icon={undefined}
             record={undefined}

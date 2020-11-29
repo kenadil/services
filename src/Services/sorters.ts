@@ -10,11 +10,6 @@ export const sortDate = {
   multiple: 3,
 };
 
-export const sortEnrollments = {
-  compare: (a: any, b: any) => a.enrollments - b.enrollments,
-  multiple: 2,
-};
-
 export const sortGPA = {
   compare: (a: any, b: any) => a.gpa - b.gpa,
   multiple: 1,

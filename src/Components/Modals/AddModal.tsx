@@ -37,8 +37,8 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
   useEffect(() => {
     setLastId(
       record
-        ? parseInt(record.id)
-        : parseInt(records[records.length - 1]?.id + 1)
+        ? record.id
+        :records[records.length - 1]?.id + 1
     );
   }, [records]);
 
@@ -120,17 +120,16 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
                     d.getDate() +
                     ", " +
                     d.getFullYear(),
-                  enrollments: undefined,
                   gpa: undefined,
                   category: null,
                 }
           }
           validationSchema={RecordSchema}
           onSubmit={(values, { resetForm }) => {
-            values.id = (lastId)?.toString();
-            values.key = lastId;
+            values.id = (lastId);
             values.category = autoCompleteVal === "N/A" ? null : advisersList.find(e => e.name === autoCompleteVal)?.id;
             setAutoCompleteVal("N/A");
+            console.log(JSON.stringify(values));
             handleOk(values);
             resetForm({});
           }}
@@ -145,22 +144,12 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
                   placeholder="Full name"
                 />
               </Form.Item>
-              <Form.Item name="key">
-                <span style={{ marginLeft: "0.25vh" }}>ID</span>
+              <Form.Item name="email">
+                <span style={{ marginLeft: "0.25vh" }}>E-mail</span>
                 <Input
-                  disabled
                   style={{ marginTop: "1vh" }}
                   name="key"
-                  placeholder="ID"
-                  value={lastId}
-                />
-              </Form.Item>
-              <Form.Item name="enrollments">
-                <span style={{ marginLeft: "0.25vh" }}>Course</span>
-                <Input
-                  style={{ marginTop: "1vh" }}
-                  name="enrollments"
-                  placeholder="Enrollments"
+                  placeholder="E-mail"
                 />
               </Form.Item>
               <Form.Item name="gpa">
@@ -172,7 +161,7 @@ const AddModal = ({ title, onSave, icon, record }: AddModalPropTypes) => {
                 />
               </Form.Item>
               <Form.Item name="category">
-                <span style={{ marginLeft: "0.25vh" }}>Adviser</span>
+                <span style={{ marginLeft: "0.25vh" }}>Course</span>
                 <AutoComplete
                   name="category"
                   placeholder="N/A"

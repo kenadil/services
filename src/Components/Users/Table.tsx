@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import DeleteModal from "../Modals/DeleteModal";
 import {
   sortDate,
-  sortEnrollments,
   sortGPA,
   sortKey,
 } from "../../Services/sorters";
@@ -21,11 +20,10 @@ let style = {
 };
 
 export type RecordType = {
-  id: string;
-  key: number;
+  id: number;
+  key: string;
   name: string;
   date: string;
-  enrollments: number;
   gpa: number;
   category: any;
 };
@@ -67,9 +65,9 @@ const UserTable = () => {
 
   const selectRow = (record: RecordType) => {
     const selectedRowKeys = [selectedKeys];
-    if (selectedRowKeys.indexOf(record.key) >= 0) {
-      selectedRowKeys.splice(selectedRowKeys.indexOf(record.key));
-    } else selectedRowKeys.push(record.key);
+    if (selectedRowKeys.indexOf(record.id) >= 0) {
+      selectedRowKeys.splice(selectedRowKeys.indexOf(record.id));
+    } else selectedRowKeys.push(record.id);
     setSelectedKeys({ selectedRowKeys });
   };
   const onSelectedRowKeyChange = (selectedRowKeys: any[]) => {
@@ -89,10 +87,6 @@ const UserTable = () => {
     setSelectedKeys({ selectedRowKeys });
     setSelected(selectedRowKeys.length);
   };
-  const enrollmentsFilters = [];
-  for (var i = 1; i < 5; i++) {
-    enrollmentsFilters.push({ text: i, value: i });
-  }
 
   return (
     <>
@@ -145,7 +139,6 @@ const UserTable = () => {
               width={"10%"}
               dataIndex="key"
               key="key"
-              defaultSortOrder="descend"
               sorter={
                 //(a:any, b:any) => a.key - b.key
                 sortKey
@@ -154,16 +147,9 @@ const UserTable = () => {
             <Column
               title={<b>Date created</b>}
               dataIndex="date"
+              defaultSortOrder="descend"
               width={"15%"}
               sorter={sortDate}
-            />
-            <Column
-              title={<b>Course</b>}
-              width={"10%"}
-              dataIndex="enrollments"
-              sorter={sortEnrollments}
-              filters={enrollmentsFilters}
-              onFilter={(value, record) => record.enrollments === value}
             />
             <Column
               title={<b>GPA</b>}

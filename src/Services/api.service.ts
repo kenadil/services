@@ -21,8 +21,7 @@ export async function deleteRecordAPI(id: number) {
   });
 }
 export async function deleteSelectedAPI(ids: any[]) {
-  var data = ids.join("_");
-  console.log(data);
+  var data = ids.join(",");
   return fetch(`${API_URL}/users/${data}`, {
     method: "DELETE",
   }).then(async (response) => {
@@ -77,7 +76,7 @@ export async function changeRecordAPI(record: RecordType) {
 }
 
 export async function changeSelectedAPI(category: any, ids: any[]) {
-  var objs = ids.join("_");
+  var objs = ids.join(",");
   return fetch(`${API_URL}/users/${objs}`, {
     method: "PATCH",
     body: JSON.stringify(category),
