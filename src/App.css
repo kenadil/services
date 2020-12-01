@@ -14,3 +14,7 @@ body {
 input {
   text-align: left!important;
 }
+
+.ant-table-cell {
+  text-align: center!important;
+}

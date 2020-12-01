@@ -3,20 +3,24 @@ import { Formik } from "formik";
 import { Form, AutoComplete, SubmitButton } from "formik-antd";
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../../Services/url";
-import { PopularCoursesSchema } from "../../Utils/ValidationSchema/validation";
+import { PopularSchema } from "../../Utils/ValidationSchema/validation";
 import LoaderComponent from "../Loader/Loader";
-import PopularCoursesResults from "../Results/MostPopularCourses";
+import PopularTeachersResults from "../Results/MostPopularTeachers";
 import "./Fields.css";
 
 const spanStyle = { marginLeft: "0.25vh", fontSize: "1.5rem" };
 
-const MostPopularCourses = () => {
+const MostPopularTeachers = () => {
   const [loading, setLoading] = useState(false);
   const [years, setYears] = useState<string[]>([]);
   const terms = ["1", "2", "3"];
+  const [data, setData] = useState<string[]>([]);
   async function getAll() {
     setLoading(true);
     let datas = await axios(`${API_URL}/services/ders_kods`);
+    const codes: string[] = [];
+    datas.data.map((e: { DERS_KOD: string }) => codes.push(e.DERS_KOD));
+    setData(codes);
     datas = await axios(`${API_URL}/services/years`);
     const temp: string[] = [];
     datas.data.map((e: { YEAR: string }) => temp.push(e.YEAR.toString()));
@@ -26,7 +30,14 @@ const MostPopularCourses = () => {
   const [table, setTable] = useState<any>([]);
   async function getPopularCourses(values: any) {
     setTable([]);
-    setTable(<PopularCoursesResults year={values.year} term={values.term} />);
+    setTable(
+      <PopularTeachersResults
+        key={values.ders_kod}
+        ders_kod={values.ders_kod}
+        year={values.year}
+        term={values.term}
+      />
+    );
   }
   useEffect(() => {
     getAll();
@@ -38,8 +49,9 @@ const MostPopularCourses = () => {
         <LoaderComponent />
       ) : (
         <Formik
-          validationSchema={PopularCoursesSchema}
+          validationSchema={PopularSchema}
           initialValues={{
+            ders_kod: undefined,
             year: undefined,
             term: undefined,
           }}
@@ -50,6 +62,25 @@ const MostPopularCourses = () => {
         >
           {({ errors, touched }) => (
             <Form className="narrowed-form" style={{ padding: "0 20vw" }}>
+              <Form.Item name="ders_kod">
+                <span style={spanStyle}>Ders Kod</span>
+                <AutoComplete
+                  style={{
+                    marginTop: "1vh",
+                    fontSize: "1.25rem",
+                    textAlign: "left",
+                  }}
+                  name="ders_kod"
+                  placeholder="Ders Kod"
+                  dataSource={data}
+                  showArrow
+                  allowClear
+                  filterOption={(value, option) =>
+                    option?.value.toUpperCase().indexOf(value.toUpperCase()) !==
+                    -1
+                  }
+                />
+              </Form.Item>
               <Form.Item name="year">
                 <span style={spanStyle}>Year</span>
                 <AutoComplete
@@ -102,4 +133,4 @@ const MostPopularCourses = () => {
   );
 };
 
-export default MostPopularCourses;
+export default MostPopularTeachers;

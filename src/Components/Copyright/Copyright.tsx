@@ -28,7 +28,7 @@ const Copyright = () => {
           type="primary"
           style={{
             width: "30%",
-            height: "6vh",
+            height: "7vh",
             margin: "5vh auto 0 auto",
             fontSize: "1.5rem",
           }}

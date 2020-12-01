@@ -6,18 +6,22 @@ import { API_URL } from "../../Services/url";
 import LoaderComponent from "../Loader/Loader";
 
 export type PopularCourses = {
+  ders_kod: string;
   year: string;
   term: string;
 };
 
-const PopularCoursesResults = ({ year, term }: PopularCourses) => {
+const PopularTeachersResults = ({ ders_kod, year, term }: PopularCourses) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   async function getData() {
     setLoading(true);
     let datas = await axios(
-      `${API_URL}/services/find_most_popular_courses/${year},${term}`
+      `${API_URL}/services/find_most_popular_teachers/${ders_kod.replace(
+        " ",
+        "_"
+      )},${year},${term}`
     );
     setData(datas.data);
     setLoading(false);
@@ -33,14 +37,14 @@ const PopularCoursesResults = ({ year, term }: PopularCourses) => {
       <h1>Results</h1>
       <Table
         pagination={{
-          pageSize: 25,
+          pageSize: 3,
           position: ["topRight", "topRight"],
         }}
         dataSource={data}
       >
         <Column
           title={<b>Teacher</b>}
-          dataIndex="DERS_KOD"
+          dataIndex="EMP_ID"
           render={(text: any) => <a href="/#">{text}</a>}
         />
         <Column
@@ -57,4 +61,4 @@ const PopularCoursesResults = ({ year, term }: PopularCourses) => {
   );
 };
 
-export default PopularCoursesResults;
+export default PopularTeachersResults;

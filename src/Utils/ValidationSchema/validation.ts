@@ -5,3 +5,8 @@ export const PopularSchema = Yup.object().shape({
   year: Yup.number().required("Cannot be empty!").min(2017).max(2019),
   term: Yup.number().required("Cannot be empty!"),
 });
+
+export const PopularCoursesSchema = Yup.object().shape({
+  year: Yup.number().required("Cannot be empty!").min(2017).max(2019),
+  term: Yup.number().required("Cannot be empty!"),
+});

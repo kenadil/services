@@ -16,8 +16,9 @@ const ServiceContent = () => {
   }, []);
 
   const setComponent = (val: string) => {
-    setSelection(selectValues.find((e) => (e.label = val))?.component);
-    console.log(selection);
+    setSelection([]);
+    console.log(selectValues.find((e) => (e.label === val))?.key);
+    setSelection(selectValues.find((e) => (e.label === val))?.component);
   };
   return (
     <div className="service-container">
