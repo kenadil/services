@@ -53,7 +53,7 @@ const PopularCoursesResults = ({ ders_kod, year, term }: PopularCourses) => {
         <Column
           title={<b>Advantage</b>}
           dataIndex="DIFF"
-          render={(text: any) => parseInt(text)}
+          render={(text: any) => text.toFixed(2)}
         />
       </Table>
     </>
