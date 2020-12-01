@@ -1,32 +1,15 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import "./App.css";
-import HomePage from "./Pages/Homepage/HomePage";
 import "antd/dist/antd.css";
-import UsersPage from "./Pages/UsersPage/UsersPage";
-import { Provider } from "react-redux";
-import {store} from "./Store/store";
-import "react-toastify/dist/ReactToastify.css";
-import ServicePage from "./Pages/ServicePage/ServicePage";
-import "./Components/Charts/ServiceChart.css";
+import Copyright from "./Components/Copyright/Copyright";
+import ContentPage from "./Components/Content/Content";
 
 function App() {
   return (
-    <Provider store={store}>
-      <Router>
-        <Switch>
-          <Route path="/users">
-            <UsersPage />
-          </Route>
-          <Route path="/services">
-            <ServicePage />
-          </Route>
-          <Route path="/">
-            <HomePage />
-          </Route>
-        </Switch>
-      </Router>
-    </Provider>
+    <div className="App">
+      <Copyright />
+      <ContentPage />
+    </div>
   );
 }
 

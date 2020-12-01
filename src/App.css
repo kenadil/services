@@ -1,146 +1,16 @@
+.App {
+  text-align: center;
+  font-size: 16px;
+}
+
 body {
-  background: #eeeeee!important;
-  font-size: 24px;
+  background-color: #042256!important;
 }
 
-.purple-button {
-  background: #3b2c85!important;
-  border: 1px solid #3b2c85!important;
-  border-radius: 50px;
-  color: white!important;
-}
-.purple-button:hover {
-  background: white!important;
-  color: #3b2c85!important;
-  border: 1px solid #3b2c85!important;
-}
-.purple-button .span:hover {
-  color:#3b2c85!important;
+.ant-layout {
+  background: none!important;
 }
 
-.site-layout-content {
-  min-height: 280px;
-  display: flex;
-  flex-direction: row;
-  padding: 10% 0 0 25%;
-  font-size: 1.25rem;
-  transform: translateY(7.5%);
-}
-.site-layout-content h3 {
-  margin-bottom: 3.22vh;
-  font-style: bold;
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-.ant-table-thead tr {
-  background: white!important;
-}
-
-.ant-checkbox {
-  margin-left: 1vw!important;
-}
-
-.ant-table-wrapper {
-  background: white;
-}
-
-.ant-table-pagination.ant-pagination {
-  padding-right: 1.25vw;
-}
-
-.delete-link {
-  color: red;
-}
-
-.side-component {
-  z-index: 1;
-  position: fixed;
-  min-height: 100%;
-  width: 17%;
-  background: #2b2257!important;
-}
-
-.side-panel {
-  color: white;
-  font-size: 1rem;
-  margin-top: 1.5vh;
-}
-
-.side-panel a {
-  color: white;
-}
-
-.side-panel-item {
-  padding-top: 1.5vh;
-  padding-left: 1.1vw;
-  display: flex;
-  flex-direction: "row";
-}
-
-.side-panel-item svg {  
-  transform: translateY(12%);
-}
-
-.ant-collapse-header {
-  color: white!important;
-  font-size: 1rem;
-}
-
-.option-content {
-  margin-bottom: 0!important;
-  margin-top: -2.5vh!important;
-  list-style: none;
-}
-
-.option-content li::before {
-  content: "\2022";
-  color: yellow;
-  font-size: 1.2rem;
-  margin-right: 1vw;
-}
-
-.option-content li {
-  margin-top: 2.5vh;
-}
-
-.option-content li a {
-  color: white;
-  font-size: 1rem;
-}
-
-.pfp-image {
-  width: 5.6vh;
-  height: 2.734375vw;
-  border-radius: 50%;
-}
-
-.search-field .ant-input {
-  padding-left: 1vw!important;
-}
-
-.multibox {
-  position: absolute;
-  left: 20.5vw;
-  top: 20.75vh;
-  z-index: 100;
-  display: flex;
-  flex-direction: inline;
-}
-
-.change-category-button {
-  width: 1.5vw;
-  margin-right: 1vw;
-}
-
-.change-category-button span {
-  transform: translateX(-50%);
-}
-
-.category-buttons {
-  position: absolute;
-  transform: translate(175%, -77.5%);
-}
-
-.site-layout-background {
-  background: #fff;
+input {
+  text-align: left!important;
 }
