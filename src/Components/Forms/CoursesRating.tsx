@@ -3,19 +3,16 @@ import { Formik } from "formik";
 import { Form, AutoComplete, SubmitButton } from "formik-antd";
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../../Services/url";
-import { GPASchema } from "../../Utils/ValidationSchema/validation";
+import { PopularCoursesSchema } from "../../Utils/ValidationSchema/validation";
 import LoaderComponent from "../Loader/Loader";
-import LoadingModal from "../Modal/LoadingModal";
-import GPAResults from "../Results/CalculateGPA";
+import CoursesRatingResults from "../Results/CoursesRating";
 import "./Fields.css";
 
 const spanStyle = { marginLeft: "0.25vh", fontSize: "1.5rem" };
 
-const CalculateGPA = () => {
+const CoursesRating = () => {
   const [loading, setLoading] = useState(false);
   const [years, setYears] = useState<string[]>([]);
-  const [studs, setStuds] = useState<string[]>([]);
-  const [modalLoading, setModalLoading] = useState(false);
   const terms = ["1", "2", "3"];
   async function getAll() {
     setLoading(true);
@@ -28,19 +25,8 @@ const CalculateGPA = () => {
   const [table, setTable] = useState<any>([]);
   async function getPopularCourses(values: any) {
     setTable([]);
-    setTable(<GPAResults stud_id={values.stud_id} year={values.year} term={values.term} />)
+    setTable(<CoursesRatingResults year={values.year} term={values.term} />);
   }
-  async function getStuds(year: number) {
-      const datas = await axios(`${API_URL}/services/stud_ids/${year}`);
-      const temp: string[] = [];
-      datas.data.map((e: { STUD_ID: string; }) => temp.push(e.STUD_ID));
-      setStuds(temp);
-  }
-  const loadStuds = (e: any) => {
-    setModalLoading(true);
-    getStuds(e);
-    setModalLoading(false);
-  };
   useEffect(() => {
     getAll();
   }, []);
@@ -51,11 +37,10 @@ const CalculateGPA = () => {
         <LoaderComponent />
       ) : (
         <Formik
-          validationSchema={GPASchema}
+          validationSchema={PopularCoursesSchema}
           initialValues={{
             year: undefined,
-            term: undefined, 
-            stud_id: undefined,
+            term: undefined,
           }}
           onSubmit={(values, { resetForm }) => {
             getPopularCourses(values);
@@ -81,9 +66,6 @@ const CalculateGPA = () => {
                     option?.value.toUpperCase().indexOf(value.toUpperCase()) !==
                     -1
                   }
-                  onChange={(e) => {
-                      if (years.includes(e)) loadStuds(e);
-                  }}
                 />
               </Form.Item>
               <Form.Item name="term">
@@ -105,25 +87,6 @@ const CalculateGPA = () => {
                   }
                 />
               </Form.Item>
-              <Form.Item name="stud_id">
-                <span style={spanStyle}>Student ID</span>
-                <AutoComplete
-                  style={{
-                    marginTop: "1vh",
-                    fontSize: "1.25rem",
-                    textAlign: "left",
-                  }}
-                  name="stud_id"
-                  placeholder="Student ID"
-                  dataSource={studs}
-                  showArrow
-                  allowClear
-                  filterOption={(value, option) =>
-                    option?.value.toUpperCase().indexOf(value.toUpperCase()) !==
-                    -1
-                  }
-                />
-              </Form.Item>
               <div>
                 <SubmitButton style={{ marginRight: "1%" }}>
                   Search
@@ -134,9 +97,8 @@ const CalculateGPA = () => {
         </Formik>
       )}
       <div style={{ padding: "0 10vw", paddingTop: "7.5vh" }}>{table}</div>
-      <LoadingModal visible={modalLoading} />
     </>
   );
 };
 
-export default CalculateGPA;;
+export default CoursesRating;

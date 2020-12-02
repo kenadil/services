@@ -5,22 +5,15 @@ import axios from "axios";
 import { API_URL } from "../../Services/url";
 import LoaderComponent from "../Loader/Loader";
 
-export type TeacherScheduleProps = {
-  emp_id: string;
-  year: string;
-  term: string;
-};
-
-const TeacherScheduleResults = ({ emp_id, year, term }: TeacherScheduleProps) => {
+const ProfitResults = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   async function getData() {
     setLoading(true);
-    let datas = await axios(
-      `${API_URL}/services/create_teacher_schedule/${emp_id},${year},${term}`
-    );
-    setData(datas.data);
+    await axios(
+      `${API_URL}/services/money_rules_the_world`
+    ).then((datas) => setData(datas.data)).catch((error) => alert(error));
     setLoading(false);
   }
 
@@ -40,26 +33,18 @@ const TeacherScheduleResults = ({ emp_id, year, term }: TeacherScheduleProps) =>
         dataSource={data}
       >
         <Column
-          title={<b>Subject</b>}
-          dataIndex="DERS_KOD"
-          render={(text: any) => <a href="#">{text}</a>}
+          title={<b>Failed Credits</b>}
+          dataIndex="RETAKES"
+          render={(text: any) => <b>{parseFloat(text) * 2}</b>}
         />
         <Column
-          title={<b>Section</b>}
-          dataIndex="SECTION"
-        />
-        <Column
-          title={<b>Day</b>}
-          dataIndex="DAY"
-        />
-        <Column
-          title={<b>Start time</b>}
-          dataIndex="START_TIME"
-          render={(text: any) => <b>{`${text}:00`}</b>}
+          title={<b>Profit</b>}
+          dataIndex="PROFIT"
+          render={(text: any) => `${text}KZT`}
         />
       </Table>
     </>
   );
 };
 
-export default TeacherScheduleResults;
+export default ProfitResults;

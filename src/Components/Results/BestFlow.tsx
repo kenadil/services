@@ -5,20 +5,24 @@ import axios from "axios";
 import { API_URL } from "../../Services/url";
 import LoaderComponent from "../Loader/Loader";
 
-export type TeacherScheduleProps = {
+export type BestFlowProps = {
   emp_id: string;
+  ders_kod: string;
   year: string;
   term: string;
 };
 
-const TeacherScheduleResults = ({ emp_id, year, term }: TeacherScheduleProps) => {
+const BestFlowResults = ({ emp_id, ders_kod, year, term }: BestFlowProps) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   async function getData() {
     setLoading(true);
     let datas = await axios(
-      `${API_URL}/services/create_teacher_schedule/${emp_id},${year},${term}`
+      `${API_URL}/services/find_best_flow/${emp_id},${ders_kod.replace(
+        " ",
+        "_"
+      )},${year},${term}`
     );
     setData(datas.data);
     setLoading(false);
@@ -40,26 +44,18 @@ const TeacherScheduleResults = ({ emp_id, year, term }: TeacherScheduleProps) =>
         dataSource={data}
       >
         <Column
-          title={<b>Subject</b>}
-          dataIndex="DERS_KOD"
+          title={<b>Section</b>}
+          dataIndex="SECTION"
           render={(text: any) => <a href="#">{text}</a>}
         />
         <Column
-          title={<b>Section</b>}
-          dataIndex="SECTION"
-        />
-        <Column
-          title={<b>Day</b>}
-          dataIndex="DAY"
-        />
-        <Column
-          title={<b>Start time</b>}
-          dataIndex="START_TIME"
-          render={(text: any) => <b>{`${text}:00`}</b>}
+          title={<b>Curve</b>}
+          dataIndex="AVERAGE_RATING"
+          render={(text: any) => <b>{`${text}%`}</b>}
         />
       </Table>
     </>
   );
 };
 
-export default TeacherScheduleResults;
+export default BestFlowResults;

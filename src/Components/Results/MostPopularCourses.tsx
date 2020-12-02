@@ -39,7 +39,7 @@ const PopularCoursesResults = ({ year, term }: PopularCourses) => {
         dataSource={data}
       >
         <Column
-          title={<b>Teacher</b>}
+          title={<b>Subject</b>}
           dataIndex="DERS_KOD"
           render={(text: any) => <a href="/#">{text}</a>}
         />

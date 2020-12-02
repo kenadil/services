@@ -49,6 +49,11 @@ const GPAResults = ({ year, term, stud_id }: GPAProps) => {
           dataIndex="GPA"
           render={(text: any) => `${text.toFixed(2)}`}
         />
+        <Column
+          title={<b>SPA</b>}
+          dataIndex="SPA"
+          render={(text: any) => text === null ? `${text.toFixed(2)}` : text}
+        />
       </Table>
     </>
   );
