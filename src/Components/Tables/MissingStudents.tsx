@@ -5,12 +5,12 @@ import React, { useEffect, useState } from "react";
 import { API_URL } from "../../Services/url";
 import { PopularCoursesSchema } from "../../Utils/ValidationSchema/validation";
 import LoaderComponent from "../Loader/Loader";
-import PopularCoursesResults from "../Results/MostPopularCourses";
+import MissingStudentsResult from "../Results/MissingStudents";
 import "./Fields.css";
 
 const spanStyle = { marginLeft: "0.25vh", fontSize: "1.5rem" };
 
-const MostPopularCourses = () => {
+const MissingStudents = () => {
   const [loading, setLoading] = useState(false);
   const [years, setYears] = useState<string[]>([]);
   const terms = ["1", "2", "3"];
@@ -25,7 +25,7 @@ const MostPopularCourses = () => {
   const [table, setTable] = useState<any>([]);
   async function getPopularCourses(values: any) {
     setTable([]);
-    setTable(<PopularCoursesResults year={values.year} term={values.term} />);
+    setTable(<MissingStudentsResult year={values.year} term={values.term}/>)
   }
   useEffect(() => {
     getAll();
@@ -101,4 +101,4 @@ const MostPopularCourses = () => {
   );
 };
 
-export default MostPopularCourses;
+export default MissingStudents;

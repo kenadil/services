@@ -5,23 +5,19 @@ import axios from "axios";
 import { API_URL } from "../../Services/url";
 import LoaderComponent from "../Loader/Loader";
 
-export type PopularCourses = {
-  ders_kod: string;
+export type MissingStudentsProps = {
   year: string;
   term: string;
 };
 
-const PopularTeachersResults = ({ ders_kod, year, term }: PopularCourses) => {
+const MissingStudentsResult = ({ year, term }: MissingStudentsProps) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   async function getData() {
     setLoading(true);
     let datas = await axios(
-      `${API_URL}/services/find_most_popular_teachers/${ders_kod.replace(
-        " ",
-        "_"
-      )},${year},${term}`
+      `${API_URL}/services/find_missing_students/${year},${term}`
     );
     setData(datas.data);
     setLoading(false);
@@ -37,28 +33,19 @@ const PopularTeachersResults = ({ ders_kod, year, term }: PopularCourses) => {
       <h1>Results</h1>
       <Table
         pagination={{
-          pageSize: 3,
+          pageSize: 25,
           position: ["topRight", "topRight"],
         }}
         dataSource={data}
       >
         <Column
-          title={<b>Teacher</b>}
-          dataIndex="EMP_ID"
+          title={<b>Students</b>}
+          dataIndex="STUD_ID"
           render={(text: any) => <a href="/#">{text}</a>}
-        />
-        <Column
-          title={<b>Pace</b>}
-          dataIndex="REG_COUNT"
-        />
-        <Column
-          title={<b>Difference</b>}
-          dataIndex="DIFF"
-          render={(text: any) => `${text.toFixed(2)}%`}
         />
       </Table>
     </>
   );
 };
 
-export default PopularTeachersResults;
+export default MissingStudentsResult;

@@ -5,25 +5,23 @@ import axios from "axios";
 import { API_URL } from "../../Services/url";
 import LoaderComponent from "../Loader/Loader";
 
-export type PopularCourses = {
-  ders_kod: string;
+export type GPAProps = {
+  stud_id: string;
   year: string;
   term: string;
+  cost: string | undefined;
 };
 
-const PopularTeachersResults = ({ ders_kod, year, term }: PopularCourses) => {
+const ExpensesResults = ({ year, term, stud_id, cost }: GPAProps) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   async function getData() {
     setLoading(true);
-    let datas = await axios(
-      `${API_URL}/services/find_most_popular_teachers/${ders_kod.replace(
-        " ",
-        "_"
-      )},${year},${term}`
-    );
-    setData(datas.data);
+    await axios(
+      `${API_URL}/services/find_expenses/${stud_id},${year},${term},${cost}`
+    ).then((datas) => setData(datas.data)).catch((error) => alert(error));
+
     setLoading(false);
   }
 
@@ -37,28 +35,27 @@ const PopularTeachersResults = ({ ders_kod, year, term }: PopularCourses) => {
       <h1>Results</h1>
       <Table
         pagination={{
-          pageSize: 3,
+          pageSize: 25,
           position: ["topRight", "topRight"],
         }}
         dataSource={data}
       >
         <Column
-          title={<b>Teacher</b>}
-          dataIndex="EMP_ID"
+          title={<b>Student</b>}
+          dataIndex="STUD_ID"
           render={(text: any) => <a href="/#">{text}</a>}
         />
         <Column
-          title={<b>Pace</b>}
-          dataIndex="REG_COUNT"
+          title={<b>Term Expenses</b>}
+          dataIndex="TERM_SPENT"
         />
         <Column
-          title={<b>Difference</b>}
-          dataIndex="DIFF"
-          render={(text: any) => `${text.toFixed(2)}%`}
+          title={<b>Total Expenses</b>}
+          dataIndex="TOTAL_SPENT"
         />
       </Table>
     </>
   );
 };
 
-export default PopularTeachersResults;
+export default ExpensesResults;

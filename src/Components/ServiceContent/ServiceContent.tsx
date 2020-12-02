@@ -22,7 +22,7 @@ const ServiceContent = () => {
   };
   return (
     <div className="service-container">
-      <h1 className="label">Select a Service</h1>
+      <h1 className="label">Select Service</h1>
       <div className="select-container">
         <AutoComplete
           style={{

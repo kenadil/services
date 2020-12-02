@@ -50,7 +50,7 @@ const PopularCoursesResults = ({ year, term }: PopularCourses) => {
         <Column
           title={<b>Difference</b>}
           dataIndex="DIFF"
-          render={(text: any) => text.toFixed(2) * 100 + '%'}
+          render={(text: any) => `${text.toFixed(2)}%`}
         />
       </Table>
     </>

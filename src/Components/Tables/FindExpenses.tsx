@@ -1,18 +1,23 @@
 import axios from "axios";
 import { Formik } from "formik";
-import { Form, AutoComplete, SubmitButton } from "formik-antd";
+import { Form, AutoComplete, SubmitButton, Input } from "formik-antd";
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../../Services/url";
-import { PopularCoursesSchema } from "../../Utils/ValidationSchema/validation";
+import { GPASchema } from "../../Utils/ValidationSchema/validation";
 import LoaderComponent from "../Loader/Loader";
-import PopularCoursesResults from "../Results/MostPopularCourses";
+import LoadingModal from "../Modal/LoadingModal";
+import ExpensesResults from "../Results/FindExpenses";
 import "./Fields.css";
 
 const spanStyle = { marginLeft: "0.25vh", fontSize: "1.5rem" };
 
-const MostPopularCourses = () => {
+const FindExpenses = () => {
   const [loading, setLoading] = useState(false);
   const [years, setYears] = useState<string[]>([]);
+  const [studs, setStuds] = useState<string[]>([]);
+  const [modalLoading, setModalLoading] = useState(false);
+  const [year, setYear] = useState("");
+  const [term, setTerm] = useState("");
   const terms = ["1", "2", "3"];
   async function getAll() {
     setLoading(true);
@@ -25,8 +30,30 @@ const MostPopularCourses = () => {
   const [table, setTable] = useState<any>([]);
   async function getPopularCourses(values: any) {
     setTable([]);
-    setTable(<PopularCoursesResults year={values.year} term={values.term} />);
+    setTable(
+      <ExpensesResults
+        stud_id={values.stud_id}
+        year={values.year}
+        term={values.term}
+        cost={values.cost}
+      />
+    );
   }
+  async function getStuds() {
+    const datas = await axios(
+      `${API_URL}/services/failed_stud_ids/${year},${term}`
+    );
+    const temp: string[] = [];
+    datas.data.map((e: { STUD_ID: string }) => temp.push(e.STUD_ID));
+    setStuds(temp);
+  }
+  useEffect(() => {
+    if (years.includes(year) && terms.includes(term)) {
+      setModalLoading(true);
+      getStuds();
+      setModalLoading(false);
+    }
+  }, [year, term]);
   useEffect(() => {
     getAll();
   }, []);
@@ -37,10 +64,12 @@ const MostPopularCourses = () => {
         <LoaderComponent />
       ) : (
         <Formik
-          validationSchema={PopularCoursesSchema}
+          validationSchema={GPASchema}
           initialValues={{
             year: undefined,
             term: undefined,
+            stud_id: undefined,
+            cost: undefined,
           }}
           onSubmit={(values, { resetForm }) => {
             getPopularCourses(values);
@@ -66,6 +95,9 @@ const MostPopularCourses = () => {
                     option?.value.toUpperCase().indexOf(value.toUpperCase()) !==
                     -1
                   }
+                  onChange={(e) => {
+                    setYear(e);
+                  }}
                 />
               </Form.Item>
               <Form.Item name="term">
@@ -85,6 +117,41 @@ const MostPopularCourses = () => {
                     option?.value.toUpperCase().indexOf(value.toUpperCase()) !==
                     -1
                   }
+                  onChange={(e) => {
+                    setTerm(e);
+                  }}
+                />
+              </Form.Item>
+              <Form.Item name="stud_id">
+                <span style={spanStyle}>Student ID</span>
+                <AutoComplete
+                  style={{
+                    marginTop: "1vh",
+                    fontSize: "1.25rem",
+                    textAlign: "left",
+                  }}
+                  name="stud_id"
+                  placeholder="Student ID"
+                  dataSource={studs}
+                  showArrow
+                  allowClear
+                  filterOption={(value, option) =>
+                    option?.value.toUpperCase().indexOf(value.toUpperCase()) !==
+                    -1
+                  }
+                />
+              </Form.Item>
+              <Form.Item name="cost">
+                <span style={spanStyle}>Credit cost</span>
+                <Input
+                  style={{
+                    marginTop: "1vh",
+                    fontSize: "1.25rem",
+                    textAlign: "left",
+                  }}
+                  name="cost"
+                  placeholder="Credit cost"
+                  allowClear
                 />
               </Form.Item>
               <div>
@@ -97,8 +164,9 @@ const MostPopularCourses = () => {
         </Formik>
       )}
       <div style={{ padding: "0 10vw", paddingTop: "7.5vh" }}>{table}</div>
+      <LoadingModal visible={modalLoading} />
     </>
   );
 };
 
-export default MostPopularCourses;
+export default FindExpenses;

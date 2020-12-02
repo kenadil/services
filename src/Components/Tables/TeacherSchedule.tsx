@@ -3,16 +3,21 @@ import { Formik } from "formik";
 import { Form, AutoComplete, SubmitButton } from "formik-antd";
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../../Services/url";
-import { PopularCoursesSchema } from "../../Utils/ValidationSchema/validation";
+import { TeacherScheduleSchema } from "../../Utils/ValidationSchema/validation";
 import LoaderComponent from "../Loader/Loader";
-import PopularCoursesResults from "../Results/MostPopularCourses";
+import LoadingModal from "../Modal/LoadingModal";
+import TeacherScheduleResults from "../Results/TeacherSchedule";
 import "./Fields.css";
 
 const spanStyle = { marginLeft: "0.25vh", fontSize: "1.5rem" };
 
-const MostPopularCourses = () => {
+const TeacherSchedule = () => {
   const [loading, setLoading] = useState(false);
   const [years, setYears] = useState<string[]>([]);
+  const [emps, setEmps] = useState<string[]>([]);
+  const [modalLoading, setModalLoading] = useState(false);
+  const [year, setYear] = useState("");
+  const [term, setTerm] = useState("");
   const terms = ["1", "2", "3"];
   async function getAll() {
     setLoading(true);
@@ -25,8 +30,23 @@ const MostPopularCourses = () => {
   const [table, setTable] = useState<any>([]);
   async function getPopularCourses(values: any) {
     setTable([]);
-    setTable(<PopularCoursesResults year={values.year} term={values.term} />);
+    setTable(<TeacherScheduleResults emp_id={values.emp_id} year={values.year} term={values.term} />)
   }
+  async function getStuds() {
+    const datas = await axios(`${API_URL}/services/emp_ids/${year},${term}`);
+    const temp: string[] = [];
+    datas.data
+      .filter((e: { EMP_ID: string }) => e.EMP_ID !== null)
+      .map((e: { EMP_ID: string }) => temp.push(e.EMP_ID.toString()));
+    setEmps(temp);
+  }
+  useEffect(() => {
+    if (years.includes(year) && terms.includes(term)) {
+      setModalLoading(true);
+      getStuds();
+      setModalLoading(false);
+    }
+  }, [year, term]);
   useEffect(() => {
     getAll();
   }, []);
@@ -37,10 +57,11 @@ const MostPopularCourses = () => {
         <LoaderComponent />
       ) : (
         <Formik
-          validationSchema={PopularCoursesSchema}
+          validationSchema={TeacherScheduleSchema}
           initialValues={{
             year: undefined,
             term: undefined,
+            emp_id: undefined,
           }}
           onSubmit={(values, { resetForm }) => {
             getPopularCourses(values);
@@ -66,6 +87,9 @@ const MostPopularCourses = () => {
                     option?.value.toUpperCase().indexOf(value.toUpperCase()) !==
                     -1
                   }
+                  onChange={(e) => {
+                    setYear(e);
+                  }}
                 />
               </Form.Item>
               <Form.Item name="term">
@@ -85,6 +109,28 @@ const MostPopularCourses = () => {
                     option?.value.toUpperCase().indexOf(value.toUpperCase()) !==
                     -1
                   }
+                  onChange={(e) => {
+                    setTerm(e);
+                  }}
+                />
+              </Form.Item>
+              <Form.Item name="emp_id">
+                <span style={spanStyle}>Teacher ID</span>
+                <AutoComplete
+                  style={{
+                    marginTop: "1vh",
+                    fontSize: "1.25rem",
+                    textAlign: "left",
+                  }}
+                  name="emp_id"
+                  placeholder="Teacher ID"
+                  dataSource={emps}
+                  showArrow
+                  allowClear
+                  filterOption={(value, option) =>
+                    option?.value.toUpperCase().indexOf(value.toUpperCase()) !==
+                    -1
+                  }
                 />
               </Form.Item>
               <div>
@@ -97,8 +143,9 @@ const MostPopularCourses = () => {
         </Formik>
       )}
       <div style={{ padding: "0 10vw", paddingTop: "7.5vh" }}>{table}</div>
+      <LoadingModal visible={modalLoading} />
     </>
   );
 };
 
-export default MostPopularCourses;
+export default TeacherSchedule;
